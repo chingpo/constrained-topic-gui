@@ -1,0 +1,55 @@
+/* dnd css */
+.dnd-display {
+    padding: 10px;
+    /* // border: 4px solid indianred; */
+    border-radius: 6px;
+    overflow-y: auto;
+    height: 600px
+  }
+  
+  .list-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 4px;
+  }
+  
+  .drop-column{
+    padding: 10px;
+    border-radius: 6px;
+    background: #f4f4f4;
+    overflow-y: auto;
+    height: 600px
+  }
+  
+  
+  .semantic-header {
+    text-align: center;
+    padding: 5px;
+    background-color: rgb(28, 29, 29);
+  }
+  
+  .patches-container {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    margin: 0 0 8px 0;
+    display: grid;
+    grid-gap: 20px;
+    flex-direction: column;
+  }
+  
+  
+  .patch-img {
+    height: 100%;
+    width: 100%;
+    object-fit:cover;
+  }
+
+  .dnd-header {
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f4f4; /* 背景颜色 */
+  border: 1px solid #ddd; /* 边框 */
+  padding: 10px; /* 内边距 */
+  font-size: 1.2em; /* 字体大小 */
+  color: #333; 
+  }

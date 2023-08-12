@@ -1,0 +1,17 @@
+/* logout */
+.thanks-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    background-color: #f0f0f0; /* Light grey background */
+  }
+  
+  .thanks-text {
+    font-size: 24px; /* Adjust this value as needed */
+    color: #333; /* Dark grey text */
+    border: 1px solid #ddd; /* Light grey border */
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff; /* White background */
+  }

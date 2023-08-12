@@ -1,0 +1,33 @@
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
+export default function LinearWithValueLabel({round}) {
+  console.log(round)
+  const completedSegments = Math.floor(round / 25);
+  const currentSegmentProgress = (round % 25) * 4;
+  console.log(completedSegments)
+  console.log(currentSegmentProgress)
+
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    {[1, 2, 3, 4].map((segment, index) => (
+      <Box sx={{ flexGrow: 1, height: '10px' }} key={index}>
+        <LinearProgress 
+          variant="determinate" 
+          value={index < completedSegments ? 100 : (index === completedSegments ? currentSegmentProgress : 0)} 
+        />
+      </Box>
+    ))}
+    <Box sx={{ minWidth: 150 }}>
+      <Typography variant="body2" color="text.secondary">
+       round {completedSegments} completed
+      </Typography>
+    </Box>
+  </Box>
+  
+  );
+ 
+}

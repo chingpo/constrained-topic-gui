@@ -1,0 +1,71 @@
+import React, { useState } from 'react';
+import { Link} from 'react-router-dom';
+import "../css/disclaimer.css"
+import Alert from '@mui/material/Alert';
+
+const Disclaimer = () =>{
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheck = () => {
+      setIsChecked(!isChecked);
+    };
+
+
+    return (
+  <div className='page'>
+           <h1>本依頼の概要</h1>
+    <p>本日は依頼をお引き受けくださり、誠にありがとうございます。本依頼は、「人間-AI協調意志決定のための信頼モデルおよび信頼較正の研究」に関するもので、人と協調するAIの開発を目指した実験の一環です。</p>
+
+    <h2>お願いする内容は、次の3点です：</h2>
+    <ol>
+      <li>アンケートに答える。</li>
+      <li>シミュレーションに参加する。</li>
+      <li>実験を通して感じたことや考えたことを答える。</li>
+    </ol>
+
+    <p>取得するデータは、参加者の年齢、性別、質問への回答、およびアンケートの内容です。</p>
+
+    <p>実験の時間は、アンケートを含めて全体で30~60分程度の予定です。全てのデータはwebブラウザを通して自動的に取得されます。実験に際し、参加者に対して身体的・精神的苦痛をかけないように、また、参加者の名誉や人格の侵害にならないように十分な配慮をいたします。</p>
+
+    <h2>実験参加への同意</h2>
+    <p>実験内容にご同意いただけない場合、実験への参加を取りやめることができます。また、参加に同意した後でも、同意を取り消し、参加を中止することができます。同意の取り消しや参加の中止による不利益はありません。ただし、実験を完了しなかった場合は謝金をお支払いできません。</p>
+
+    <h2>個人情報の保護</h2>
+    <p>取得したデータは、研究目的以外には使用しません。問題・アンケートへの回答結果は回答者番号で管理され、匿名化されていますので、データから個人情報を特定されることはありません。</p>
+
+    <h2>研究結果の公表</h2>
+    <p>回答いただいた内容は匿名化された状態で、学術論文や学会発表として公表される予定です。</p>
+
+    <h2>同意事項</h2>
+    <p>以下の内容について同意し実験に参加する場合は、「同意して次に進む」を押してください。</p>
+    <div className="consent">
+    <p >私は、「人間-AI協調意志決定のための信頼モデルおよび信頼較正の研究」の参加者実験における目的・方法・予測される問題等について十分な説明を受け、本実験に関する以下の項目を了解しました。</p>
+    <ul>
+      <li>研究内容について</li>
+      <li>その後のアンケートに答える</li>
+      <li>参加者に対して身体的・精神的苦痛を与えないこと</li>
+      <li>自らの自由意思でいつでも実験を中止できること</li>
+      <li>いかなる時点において実験参加の拒否をしても何ら不利益を被らないこと</li>
+      <li>参加者の名誉や人格の侵害にならないこと</li>
+      <li>実験で得られたデータは，委託元に受け渡され，個人が特定できない形の統計情報として，論文，学会発表で用いられる場合があること</li>
+      <li>万一不利益を被った場合には，当該ネット調査会社に対して申し立てを行うことができること</li>
+    </ul>
+    </div>
+    <div className='check-block'>
+        <div className='input-container'>
+          <input type="checkbox" checked={isChecked} onChange={handleCheck} />
+          <label> I agree to the terms and conditions</label>
+        </div>
+        <Link to={isChecked ? "/display" : "#"}>
+        <button onClick={() => { if (!isChecked)  <Alert severity="warning">please read and check</Alert>  }}>同意して次に進む</button>
+        </Link>
+    </div>
+      </div>
+
+  
+
+
+    );
+}
+
+export default Disclaimer
