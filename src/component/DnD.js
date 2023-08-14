@@ -5,6 +5,8 @@ import "../css/dnd.css"
 import { Link, useLocation } from "react-router-dom";
 import useAxiosPrivate from "../hook/useAxiosPrivate";
 import Alert from '@mui/material/Alert';
+import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
 
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import submit from "../submit.png";
@@ -92,16 +94,20 @@ export default function DnD() {
 
     return (
         <div>
- 
+
             <div className="dnd-header" >
-                <h4>selected cluster:{cluster_ids}</h4>
+                <Typography variant="h6">selected cluster: &nbsp;
+                    {cluster_ids.map((id, index) => (
+                        <Chip key={index} label={<Typography variant="body1">{`Topic ${id}`}</Typography>} variant="outlined" />
+                    ))}
+                </Typography>
                 <Link to='/display'>
                     <button onClick={roundPlus}>
-                        <img src={submit} alt="Submit" style={{ marginRight: '10px' ,width:'1.4rem',verticalAlign: 'middle' }} />
+                        <img src={submit} alt="Submit" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
                         submit this round</button>
                 </Link>
             </div>
-            <LinearProgressWithLabel round={round*25+12.5} />
+            <LinearProgressWithLabel round={round * 25 + 12.5} />
             {items?.length ? (
                 <div className="dnd-display">
                     <DragDropContext onDragEnd={handleDragAndDrop}>
@@ -137,7 +143,7 @@ export default function DnD() {
                     </DragDropContext>
                 </div>)
                 :
-                <img style={{ width: '7rem', display: 'block' ,margin:'auto',marginTop: '70px',}} src={require('../loading.gif')}
+                <img style={{ width: '7rem', display: 'block', margin: 'auto', marginTop: '70px', }} src={require('../loading.gif')}
                 ></img>}
         </div>
 

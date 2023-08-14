@@ -1,6 +1,6 @@
 import "./App.css";
 import DnD from "./component/DnD";
-import Display from "./component/Display"
+import Display from "./component/Display";
 import Layout from "./component/Layout";
 import Disclaimer from "./component/Disclaimer";
 import Register from "./component/Register";
@@ -16,7 +16,7 @@ function App() {
   return (
     <>
      <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<Layout />}> 
       <Route path="register" element={<Register/>}/>
       <Route path="disclaimer" element={<Disclaimer/>} />
       <Route path="display" element={<Display/>} />

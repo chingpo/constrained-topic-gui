@@ -8,6 +8,7 @@ import ClusterGraph from "./ClusterGraph";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
+import Typography from '@mui/material/Typography';
 
 import submit from "../submit.png";
 
@@ -53,7 +54,7 @@ function Display() {
         <div className="instruction-text">
           {round > 3 ? <p> タスクは以上になります。
             ご協力ありがとうございました。</p> :
-            <p>please slect 5 topic first</p>
+            <Typography variant="h6">please slect 5 topic first</Typography>
           }
         </div>
 

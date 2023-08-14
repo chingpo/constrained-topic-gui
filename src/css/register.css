@@ -39,7 +39,7 @@
   
   label,
   button {
-    margin-top: 1rem;
+    /* margin-top: 1rem; */
     font-size: 1.4rem;
   }
   
@@ -99,5 +99,5 @@
 }
 
 .faCheck, .faTimes, .faInfoCircle {
-    font-size: 0.8em; /* 调整这个值以改变图标大小 */
+    font-size: 0.8em; 
 }
