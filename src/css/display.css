@@ -2,6 +2,7 @@
 .chart-part {
     position: relative;
     height:40rem;
+    align-items: center;
     /* padding-top: 20px; */
     }
   
@@ -47,4 +48,28 @@
   }
  
   
-  
+/* Style for rating container */
+.rating-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  position: relative;
+}
+
+/* Style for rating label */
+.rating-label {
+  position: absolute;
+  top: 0;
+  font-size: 1rem;
+  display: inline-block;
+  max-width: 30%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rating-label:last-child {
+  left: auto;
+  right: 0;
+}

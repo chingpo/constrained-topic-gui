@@ -1,14 +1,19 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import "../css/display.css"
-import useLogout from "../hook/useLogout";
 import useAxiosPrivate from "../hook/useAxiosPrivate";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
 import ClusterGraph from "./ClusterGraph";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import Typography from '@mui/material/Typography';
 
 import submit from "../submit.png";
 
@@ -21,7 +26,6 @@ function Display() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  const logout = useLogout();
   const [database, setDatabase] = useState('stl'); // 新增的状态
 
   const handleDatabaseChange = (e) => {
@@ -32,10 +36,6 @@ function Display() {
     localStorage.setItem("round", round);
   }, [round]);
 
-  const signOut = async () => {
-    await logout();
-    navigate('/logout');
-  }
 
   const [cluster_ids, setClusters] = useState([]);
   const [isValidTopic, setIsValidTopic] = useState(false);
@@ -47,9 +47,56 @@ function Display() {
     setIsValidTopic(cluster_ids.length >= 5);
   }, [cluster_ids]);
 
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const rate = localStorage.getItem('startRated');
+    // const rate = true;  # test environment
+    if (isValidTopic&& !rate) {
+      setOpen(true);
+    }
+  }, [isValidTopic]);
+  const [score, setScore] = useState(0);
+  const [_, __, ___, axiosFetch] = useAxiosPrivate();
+  const handleRateSubmit = () => {
+    axiosFetch({
+        method: 'post',
+        url: '/rate',
+        requestConfig: {
+            type: "start",
+            likert: score   
+        }
+    });
+    // 错误处理
+    setOpen(false);
+    localStorage.setItem('startRated', true);
+  }
 
   return (
     <div>
+          <Dialog open={open} onClose={handleRateSubmit}>
+        <DialogTitle>Please rate!</DialogTitle>
+        <DialogContent>   
+        <Typography component="legend">how do you score the clustering group</Typography>
+                <div className="rating-container">
+                  <Rating
+                    name="simple-controlled"
+                    value={score}
+                    onChange={(event, newValue) => {
+                      setScore(newValue);
+                    }}
+                    max={7}
+                  />
+                </div>
+        </DialogContent>
+        <DialogActions>
+              <Button onClick={handleRateSubmit} disabled={score === 0}>submit</Button>
+            </DialogActions>
+      
+      </Dialog>
+
+
+
+
       <div className="display-header">
         <div className="instruction-text">
           {round > 3 ? <p> タスクは以上になります。
@@ -60,12 +107,13 @@ function Display() {
 
         <div className='topic-select'>
           <div >
-            <select value={database} onChange={handleDatabaseChange}>
+            
+            {round < 4 ?
+              <>
+              <select value={database} onChange={handleDatabaseChange}>
               <option value="coco">COCO</option>
               <option value="stl">STL</option>
             </select>
-            {round < 4 ?
-              <>
                 <select
                   value={cluster_ids.sort().toString()}
                   onChange={handleSelectChange}
@@ -87,7 +135,7 @@ function Display() {
             // <></>   
             // test environment
             <Link to="/logout">
-              <button onClick={signOut}  >finish</button>
+              <button >finish</button>
             </Link>
             :
             <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }}><button disabled={!isValidTopic}>

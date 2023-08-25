@@ -5,11 +5,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 export default function LinearWithValueLabel({round}) {
-  console.log(round)
   const completedSegments = Math.floor(round / 25);
   const currentSegmentProgress = (round % 25) * 4;
-  console.log(completedSegments)
-  console.log(currentSegmentProgress)
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

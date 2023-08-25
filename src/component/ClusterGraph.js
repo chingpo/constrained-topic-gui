@@ -86,8 +86,6 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
 
   useEffect(() => {
     renderChart();
-    console.log(click_cluster_ids)
-    console.log(cluster_ids)
   }, [click_cluster_ids, cluster_ids, width, height]);
 
 

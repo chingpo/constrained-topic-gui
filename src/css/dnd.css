@@ -4,7 +4,9 @@
     /* // border: 4px solid indianred; */
     border-radius: 6px;
     overflow-y: auto;
-    height: 600px
+    height: 600px;
+    width: 70%;
+    margin: 0 auto;
   }
   
   .list-grid {
@@ -15,7 +17,7 @@
   
   .drop-column{
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 10px;
     background: #f4f4f4;
     overflow-y: auto;
     height: 600px
@@ -25,7 +27,6 @@
   .semantic-header {
     text-align: center;
     padding: 5px;
-    background-color: rgb(28, 29, 29);
   }
   
   .patches-container {

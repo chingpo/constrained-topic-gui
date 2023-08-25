@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link} from 'react-router-dom';
 import "../css/disclaimer.css"
-import Alert from '@mui/material/Alert';
 
 const Disclaimer = () =>{
-    const [isChecked, setIsChecked] = useState(false);
-
-    const handleCheck = () => {
-      setIsChecked(!isChecked);
-    };
-
-
+  const [seconds, setSeconds] = useState(30);
+  const [disabled, setDisabled] = useState(true);
+  useEffect(() => {
+    if (seconds > 0) {
+      const timerId = setTimeout(() => {
+        setSeconds(seconds - 1);
+      }, 1000);
+      return () => clearTimeout(timerId);
+    } else {
+      setDisabled(false);
+    }
+  }, [seconds]);
     return (
   <div className='page'>
            <h1>本依頼の概要</h1>
@@ -52,17 +56,15 @@ const Disclaimer = () =>{
     </ul>
     </div>
     <div className='check-block'>
-        <div className='input-container'>
-          <input type="checkbox" checked={isChecked} onChange={handleCheck} />
-          <label> I agree to the terms and conditions</label>
-        </div>
-        <Link to={isChecked ? "/display" : "#"}>
-        <button onClick={() => { if (!isChecked)  <Alert severity="warning">please read and check</Alert>  }}>同意して次に進む</button>
-        </Link>
+    <Link to="/instruction">
+  <button disabled={disabled}> 
+    {disabled ? `よくお読みください,${seconds}秒後にクリックを許可します。` : '同意して次に進む'}
+  </button>
+</Link>
+       
     </div>
       </div>
 
-  
 
 
     );

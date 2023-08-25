@@ -2,9 +2,10 @@
 .thanks-container {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     height: 80vh;
-    background-color: #f0f0f0; /* Light grey background */
+    background-color: #f0f0f0; 
   }
   
   .thanks-text {
@@ -15,3 +16,39 @@
     border-radius: 10px;
     background-color: #fff; /* White background */
   }
+
+  .final-rate {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%; /* 设置宽度为页面的60% */
+    margin: 0 auto; /* 居中 */
+}
+
+.likertLegend {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row; /* 设置为行方向 */
+    flex-wrap: wrap; /* 允许换行 */
+    justify-content: center; /* 水平居中 */
+    width: 100%; /* 占满父元素的宽度 */
+}
+
+.likertBand {
+    flex-grow: 0;
+    width: 100%; /* 占满父元素的宽度，强制换行 */
+}
+
+  
+  fieldset.likertScale .likertIndicator {
+/*     
+    border: thin solid black;
+    background-color: lightGray; */
+
+  }
+
+
+

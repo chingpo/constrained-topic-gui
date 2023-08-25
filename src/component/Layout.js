@@ -1,4 +1,4 @@
-import React,{ useState,useEffect } from 'react';
+import React,{ useState,useEffect,useRef } from 'react';
 import "../App.css"
 import { Outlet } from "react-router-dom"
 import { useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 function Layout() {
   const location = useLocation();
   const [showGuideline, setShowGuideline] = useState(false);
-  const [highlightButton, setHighlightButton] = useState(false);
+  const [highlightButton, setHighlightButton] = useState(null);
   
 
   useEffect(() => {
@@ -28,24 +28,26 @@ function Layout() {
     };
   }, [highlightButton]);
 
+  useEffect(() => {
+    if (highlightButton === null && location.pathname === '/display') {
+      if (!localStorage.getItem('highlighted')) {
+        localStorage.setItem('highlighted', 'true');
+        setHighlightButton(true);
+      } else {
+        setHighlightButton(false);
+      }
+    }
+  }, [ location.pathname]);
+     
+
   const handleGuidelineClose = () => {
     setShowGuideline(false);
-    if (!localStorage.getItem('highlighted')) {
-      setHighlightButton(true);
-      localStorage.setItem('highlighted', 'true');
-    }
+  
   };
 
   const handleGuidelineOpen = () => {
     setShowGuideline(true);
   };
-  
-  useEffect(() => {
-    if (location.pathname === '/display' && !localStorage.getItem('displayVisited')) {
-      setShowGuideline(true);
-      localStorage.setItem('displayVisited', 'true');
-    }
-  }, [location.pathname]);
 
 
   return (

@@ -17,54 +17,54 @@ export default function DnD() {
     let round = parseInt(localStorage.getItem("round")) || 0;
 
 
-    const axiosPrivate = useAxiosPrivate();
-    // use effect set items
+    const [data, error, loading, axiosFetch] = useAxiosPrivate();
+    const getPatch = () => {
+        // in case of refresh
+        const oldItems = localStorage.getItem(`old_items_${round}`);
+        if (oldItems) {
+            setItems(JSON.parse(oldItems));
+        } else {
+            axiosFetch({
+                method: 'post',
+                url: '/patches',
+                requestConfig: {
+                    cluster_ids: cluster_ids,
+                    limit: column_limit    
+                }
+            });
+        }
+    }
+    
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-        const getPatch = async () => {
-            try {
-                const response = await axiosPrivate.post('/patches',
-                    JSON.stringify({ "cluster_ids": cluster_ids, "limit": column_limit }),
-                    {
-                        headers: { 'Content-Type': 'application/json' },
-                        withCredentials: true,
-                        signal: controller.signal
-                    }
-                );
-                console.log(response.data.data.items);
-                isMounted && setItems(response.data.data.items);
-                localStorage.setItem("old_items", response.data.data.items);
-            } catch (err) {
-                console.error(err);
+        getPatch();
+    }, []);
+    
+    useEffect(() => {
+        if (!loading && !error && data?.data ) {
+            console.log(data.data);
+            if (!localStorage.getItem(`old_items_${round}`)) {
+                setItems(data.data.items);
+                localStorage.setItem(`old_items_${round}`, JSON.stringify(data.data.items));
             }
         }
-        getPatch();
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }
-
-
-    }, [])
+    }, [data, loading, error]);
 
     const roundPlus = async () => {
         round++;
         localStorage.setItem("round", round);
-        console.log(items);
         let old_items = localStorage.getItem("old_items")
-        try {
-            const response = await axiosPrivate.post('/patches-update',
-                JSON.stringify({ "old_items": old_items, "new_items": items }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
-            console.log(response.data);
-        } catch (err) {
-            console.error(err);
-        }
+        // try {
+        //     const response = await axiosPrivate.post('/patches-update',
+        //         JSON.stringify({ "old_items": old_items, "new_items": items }),
+        //         {
+        //             headers: { 'Content-Type': 'application/json' },
+        //             withCredentials: true
+        //         }
+        //     );
+        //     console.log(response.data);
+        // } catch (err) {
+        //     console.error(err);
+        // }
     }
 
     const handleDragAndDrop = (result) => {
