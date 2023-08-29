@@ -57,7 +57,7 @@ function Layout() {
         <header className="header">
           <h1>Experiment</h1>
           {(location.pathname === '/display' || location.pathname === '/dnd') && <button onClick={handleGuidelineOpen} style={{ border: '1px solid hsla(0,0%,100%,.2)', 
-      boxShadow: highlightButton ? '0 0 10px yellow' : 'none'  
+      boxShadow: highlightButton ? '0 0 10px white' : 'none'  
       }}>Show Guideline</button>}
           <Dialog open={showGuideline} onClose={handleGuidelineClose}>
             <DialogTitle>User Instructions</DialogTitle>
@@ -70,7 +70,7 @@ function Layout() {
           </Dialog>
         </header>
         <div className='main-container'>
-        <Outlet />
+            <Outlet/>
         </div>
       </div>
     </>

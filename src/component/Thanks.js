@@ -1,8 +1,6 @@
 
 import '../css/logout.css';
 import {  useEffect, useState } from "react";
-import Rating from '@mui/material/Rating';
-import Typography from '@mui/material/Typography';
 import useAxiosPrivate from "../hook/useAxiosPrivate";
 import Likert from "react-likert-scale";
 
@@ -11,15 +9,15 @@ import Likert from "react-likert-scale";
 const Thanks = () => {
     
     // production env remove
-    localStorage.clear();
-    // localStorage.removeItem('round');
-    // localStorage.removeItem('displayVisited');
-    // localStorage.removeItem('highlighted');
-    // localStorage.removeItem('startRated');
-    // localStorage.removeItem('finish');
+    // localStorage.clear();
+    // Object.keys(localStorage).forEach(key => {
+    //     if (key !== 'finish') {
+    //       localStorage.removeItem(key);
+    //     }
+    //   });
 
     const [finish, setFinish] = useState(localStorage.getItem('finish') === 'true');
-    const [rate, error, loading, axiosFetch] = useAxiosPrivate();
+    const [rate, error, _, axiosFetch] = useAxiosPrivate();
     const onChange = (score) => {
         axiosFetch({
             method: 'POST',
@@ -55,23 +53,19 @@ const Thanks = () => {
 
        
 
-    return (
-        <div>
+    return ( 
         <div className="thanks-container">
-            
-           
                 {!finish ?
              <div className='final-rate'>
                 <Likert {...likertOptions} />
              </div>:
-            <div>
+            <div >
                 <p className="thanks-text">
                     ご協力ありがとうございました。
                 </p> 
-            </div>  }    
-        
+            </div>  }     
         </div>
-        </div>
+      
     )
 }
 

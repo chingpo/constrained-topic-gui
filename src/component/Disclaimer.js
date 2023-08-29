@@ -3,7 +3,7 @@ import { Link} from 'react-router-dom';
 import "../css/disclaimer.css"
 
 const Disclaimer = () =>{
-  const [seconds, setSeconds] = useState(30);
+  const [seconds, setSeconds] = useState(3);
   const [disabled, setDisabled] = useState(true);
   useEffect(() => {
     if (seconds > 0) {

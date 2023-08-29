@@ -1,12 +1,13 @@
+import { local } from "d3";
 import { createContext, useState } from "react";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState({});
+    const token=localStorage.getItem('token');
 
     return (
-        <AuthContext.Provider value={{ auth, setAuth}}>
+        <AuthContext.Provider value={{ token}}>
             {children}
         </AuthContext.Provider>
     )

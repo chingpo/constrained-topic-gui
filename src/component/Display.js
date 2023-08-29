@@ -51,7 +51,7 @@ function Display() {
   useEffect(() => {
     const rate = localStorage.getItem('startRated');
     // const rate = true;  # test environment
-    if (isValidTopic&& !rate) {
+    if (isValidTopic && !rate) {
       setOpen(true);
     }
   }, [isValidTopic]);
@@ -59,12 +59,12 @@ function Display() {
   const [_, __, ___, axiosFetch] = useAxiosPrivate();
   const handleRateSubmit = () => {
     axiosFetch({
-        method: 'post',
-        url: '/rate',
-        requestConfig: {
-            type: "start",
-            likert: score   
-        }
+      method: 'post',
+      url: '/rate',
+      requestConfig: {
+        type: "start",
+        likert: score
+      }
     });
     // 错误处理
     setOpen(false);
@@ -73,25 +73,25 @@ function Display() {
 
   return (
     <div>
-          <Dialog open={open} onClose={handleRateSubmit}>
+      <Dialog open={open} onClose={handleRateSubmit} disableBackdropClick>
         <DialogTitle>Please rate!</DialogTitle>
-        <DialogContent>   
-        <Typography component="legend">how do you score the clustering group</Typography>
-                <div className="rating-container">
-                  <Rating
-                    name="simple-controlled"
-                    value={score}
-                    onChange={(event, newValue) => {
-                      setScore(newValue);
-                    }}
-                    max={7}
-                  />
-                </div>
+        <DialogContent>
+          <Typography component="legend">how do you score the clustering group</Typography>
+          <div className="rating-container">
+            <Rating
+              name="simple-controlled"
+              value={score}
+              onChange={(event, newValue) => {
+                setScore(newValue);
+              }}
+              max={7}
+            />
+          </div>
         </DialogContent>
         <DialogActions>
-              <Button onClick={handleRateSubmit} disabled={score === 0}>submit</Button>
-            </DialogActions>
-      
+          <Button onClick={handleRateSubmit} disabled={score === 0}>submit</Button>
+        </DialogActions>
+
       </Dialog>
 
 
@@ -100,20 +100,20 @@ function Display() {
       <div className="display-header">
         <div className="instruction-text">
           {round > 3 ? <p> タスクは以上になります。
-            ご協力ありがとうございました。</p> :
+            please click finish </p> :
             <Typography variant="h6">please slect 5 topic first</Typography>
           }
         </div>
 
         <div className='topic-select'>
           <div >
-            
+
             {round < 4 ?
               <>
-              <select value={database} onChange={handleDatabaseChange}>
-              <option value="coco">COCO</option>
-              <option value="stl">STL</option>
-            </select>
+                <select value={database} onChange={handleDatabaseChange}>
+                  <option value="coco">COCO</option>
+                  <option value="stl">STL</option>
+                </select>
                 <select
                   value={cluster_ids.sort().toString()}
                   onChange={handleSelectChange}
@@ -127,7 +127,7 @@ function Display() {
                     </option>
                   ))}
                 </select>
-                {isValidTopic && <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginTop: '10px',marginLeft: '10px' }} />}
+                {isValidTopic && <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginTop: '10px', marginLeft: '10px' }} />}
               </> : <></>
             }
           </div>
@@ -139,7 +139,7 @@ function Display() {
             </Link>
             :
             <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }}><button disabled={!isValidTopic}>
-              <img src={submit} alt="Submit" style={{ marginRight: '10px' ,width:'1.4rem',verticalAlign: 'middle' }} />
+              <img src={submit} alt="Submit" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
               play</button></Link>}
 
 

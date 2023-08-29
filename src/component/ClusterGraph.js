@@ -23,7 +23,6 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
   const [showAlert, setShowAlert] = useState(false);
   const choose_topic = (d, i) => {
     if (click_cluster_ids.length >= 5 && !click_cluster_ids.includes(i.cluster_id)) {
-
       // alert("It's enough");
       setShowAlert(true);
       return; // 如果已经有5个或更多的元素，就不再添加新的元素
@@ -62,10 +61,9 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
       .append('image')
       .attr('width', patch_width)
       .attr('height', patch_height)
-      .attr('xlink:href', d => home_url + d.img_name)
+      .attr('href', d => home_url + d.img_name)
       .attr('x', d => xScale(d.x))
       .attr('y', d => yScale(d.y))
-
       .on('click', choose_topic);
 
     let rects = svg.selectAll('rect')
@@ -79,8 +77,6 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
       .style('fill', 'none')
       .style('stroke', d => (click_cluster_ids.includes(d.cluster_id) || cluster_ids.includes(d.cluster_id)) ? colors[d.cluster_id % colors.length] : 'none')
       .style('stroke-width', d => (click_cluster_ids.includes(d.cluster_id) || cluster_ids.includes(d.cluster_id)) ? '3px' : '0px');
-
-
   }
 
 
@@ -100,7 +96,6 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
          }
 
       <div className="chart-part">
-         
         <svg width={width} height={height} ref={svgRef} />
       </div>
 

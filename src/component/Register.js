@@ -4,17 +4,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from '../api/axios';
 // import '../App.css';
 import '../css/register.css';
-
-import useAuth from '../hook/useAuth';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const AGE_REGEX = /^(1[8-9]|[2-9][0-9])$/;
 const REGISTER_URL = '/register';
 
 const Register = () => {
-    const { setAuth } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    
+    useEffect(() => {
+        if (localStorage.getItem('finish')) {
+        navigate('/logout');
+        }
+    }, [navigate]);
 
     const ageRef = useRef();
     const errRef = useRef();
@@ -57,9 +60,10 @@ const Register = () => {
             );
             const accessToken = response?.data?.data.access_token;
             const user_id = response?.data?.data.user_id;
-            setAuth({ accessToken,user_id});
+            localStorage.setItem('token', accessToken);
             //clear state and controlled inputs
             //need value attrib on inputs for this
+            console.log("register",accessToken);
             setAge('');
             setGender('');
             navigate('/disclaimer', { state: { from: location }, replace: true} );
