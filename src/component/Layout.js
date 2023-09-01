@@ -7,6 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import guide from '../guide.png';
 
 function Layout() {
   const location = useLocation();
@@ -55,14 +56,15 @@ function Layout() {
      
       <div>
         <header className="header">
-          <h1>Experiment</h1>
+          <h1>画像トピック化実験</h1>
           {(location.pathname === '/display' || location.pathname === '/dnd') && <button onClick={handleGuidelineOpen} style={{ border: '1px solid hsla(0,0%,100%,.2)', 
       boxShadow: highlightButton ? '0 0 10px white' : 'none'  
-      }}>Show Guideline</button>}
+      }}>ユーザーガイド</button>}
           <Dialog open={showGuideline} onClose={handleGuidelineClose}>
-            <DialogTitle>User Instructions</DialogTitle>
+            <DialogTitle>操作手順</DialogTitle>
             <DialogContent>
-              <p>Here are some instructions...</p>
+              <p>操作は以下の通りです。4回のループの後に、「提出」をクリックしてください。</p>
+              <img src={guide} alt="Guide" style={{width: '100%'}} />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleGuidelineClose}>OK</Button>

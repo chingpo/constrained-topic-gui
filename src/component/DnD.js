@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import submit from "../submit.png";
+import back from "../go-back.png";
 
 export default function DnD() {
     const { cluster_ids, column_limit } = useLocation().state;
@@ -96,15 +96,15 @@ export default function DnD() {
         <div>
 
             <div className="dnd-header" >
-                <Typography variant="h6">selected cluster: &nbsp;
+                <Typography variant="h6">選択されたトピック: &nbsp;
                     {cluster_ids.map((id, index) => (
-                        <Chip key={index} label={<Typography variant="body1">{`Topic ${id}`}</Typography>} variant="outlined" />
+                        <Chip key={index} label={<Typography variant="body1">{`トピック ${id}`}</Typography>} variant="outlined" />
                     ))}
                 </Typography>
-                <Link to='/display'>
-                    <button onClick={roundPlus}>
-                        <img src={submit} alt="Submit" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
-                        submit this round</button>
+                <Link to='/display' style={{ textDecoration: 'none' }}>
+                    <button onClick={roundPlus}  style={{ display: 'flex', alignItems: 'center' }}>
+                        <img src={back} alt="Back" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
+                        送信</button>
                 </Link>
             </div>
             <LinearProgressWithLabel round={round * 25 + 12.5} />

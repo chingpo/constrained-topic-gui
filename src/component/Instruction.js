@@ -7,39 +7,38 @@ const Instruction = () =>{
 return(
     <div className='page'>
 
-<h1>Important Tips:</h1>
+<h1>重要なヒント:</h1>
 <ul>
-<li>- Take your time to carefully observe the images and their categories.</li>
-<li>- If you're unsure about an image's category, place it in the cluster you think fits best.</li>
-<li>- Your input is valuable! Your thoughtful participation will help us better understand clustering preferences.</li>
+<li>- 画像のカテゴリーについて確信が持てない場合は、最も適していると思われるクラスターに配置してください。</li>
+<li>- あなたの意見は貴重です！あなたの思慮深い参加が、クラスタリングの嗜好をより理解するのに役立ちます。</li>
 </ul>
 
-<h2>step 1. Topic Selection:</h2>
+<h2>ステップ1. トピックの選択:</h2>
 <ul>
-<li>- On this page, you'll see clustering results displayed as topics.</li>
-<li>- You have two options for selecting a topic:</li>
-<li>- Choose one of the four predefined topic combinations.</li>
-<li>- Create a custom topic by selecting five clusters from the chart.</li>
-<li>- Once you're satisfied with your selection, click play proceed to the next page.</li>
+<li>- このページでは、トピックとして表示されるクラスタリングの結果を確認できます。</li>
+<li>- トピックの選択には2つのオプションがあります：</li>
+<li>- 4つの事前定義されたトピックの組み合わせから一つを選択します。</li>
+<li>- チャートから5つのクラスターを選択してカスタムトピックを作成します。</li>
+<li>- 選択に満足したら、次のページに進むために「再生」をクリックします。</li>
 </ul>
-<h2>step 2. Image Validation:</h2>
+<h2>ステップ2. 画像の検証:</h2>
 <ul>
-<li>- In this page, you will be presented with 20 images each from the topics you chose.</li>
-<li>- Examine each image and drag&drop any images you believe are incorrectly categorized to the appropriate cluster.</li>
-<li>- If you need to make adjustments, click "Submit" to return to the third page and refine your topic selection.</li>
-</ul>
-
-<h2>Completing the Experiment:</h2>
-<ul>
-<li>- You will repeat the clustering and validation process four times in total.</li>
-<li>- Feel free to explore different topic combinations and cluster images accurately to the best of your ability.</li>
+<li>- このページでは、選択したトピックからそれぞれ20枚の画像が表示されます。</li>
+<li>- 各画像を検討し、誤ってカテゴリ分けされていると思われる画像を適切なクラスターにドラッグ＆ドロップします。</li>
+<li>- 調整が必要な場合は、「送信」をクリックして3ページ目に戻り、トピックの選択を洗練します。</li>
 </ul>
 
-No need to worry about forgetting the operation process, the user guide will be continuously displayed in the header.
+<h2>実験の完了:</h2>
+<ul>
+<li>- 合計で4回、クラスタリングと検証のプロセスを繰り返します。</li>
+<li>- 自由に異なるトピックの組み合わせを探索し、最善を尽くして画像を正確にクラスタリングしてください。</li>
+</ul>
+
+操作手順を暗記する必要はありません。ユーザーガイドはヘッダーに継続的に表示されます。
 <div className='check-block'>
 <Link to="/display">
   <button > 
-   start
+   始まる
   </button>
 </Link>
 </div>

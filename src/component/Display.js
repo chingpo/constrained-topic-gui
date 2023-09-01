@@ -15,7 +15,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
-import submit from "../submit.png";
+import next from "../next.png";
 
 function Display() {
 
@@ -100,8 +100,9 @@ function Display() {
       <div className="display-header">
         <div className="instruction-text">
           {round > 3 ? <p> タスクは以上になります。
-            please click finish </p> :
-            <Typography variant="h6">please slect 5 topic first</Typography>
+            「提出」をクリックしてください。 </p> :
+            // <Typography variant="h6">please slect 5 topic first</Typography>
+            <Typography variant="h6">科目を選択し、興味のあるトピックを5つ選んでください。</Typography>
           }
         </div>
 
@@ -135,14 +136,12 @@ function Display() {
             // <></>   
             // test environment
             <Link to="/logout">
-              <button >finish</button>
+              <button >提出</button>
             </Link>
             :
-            <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }}><button disabled={!isValidTopic}>
-              <img src={submit} alt="Submit" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
-              play</button></Link>}
-
-
+            <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }} style={{ textDecoration: 'none' }}>
+              <button style={{ display: 'flex', alignItems: 'center' }} disabled={!isValidTopic}>
+              <img src={next} alt="Next" style={{ marginRight: '5px', width: '1.4rem'}} />プレー</button></Link>}
         </div>
 
       </div>

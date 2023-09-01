@@ -30,15 +30,15 @@ const Thanks = () => {
     }
 
     const likertOptions = {
-        question: "do you think the final clustering better than init?",
+        question: "最終的なクラスタリングは初期状態よりも良いと思いますか？",
         responses: [
-          { value: 1, text: "Strongly disagree" },
-          { value: 2, text: "disagree" },
-          { value: 3, text: "Somewhat Disagree" },
-          { value: 4, text: "Neutral" },
-          { value: 5, text: "Somewhat Agree" },
-          { value: 6, text: "agree" },
-          { value: 7, text: "Strongly agree" }
+          { value: 1, text: "全く同意しない" },
+          { value: 2, text: "同意しない" },
+          { value: 3, text: "ある程度同意しない" },
+          { value: 4, text: "どちらでもない" },
+          { value: 5, text: "ある程度同意する" },
+          { value: 6, text: "同意する" },
+          { value: 7, text: "全く同意する" }
         ],
         picked: (val) => {
           if (finish) {

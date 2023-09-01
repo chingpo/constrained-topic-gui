@@ -85,10 +85,10 @@ const Register = () => {
             <div className="register-section">
                 <section>
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h1>Register</h1>
+                    <h1>基本情報に関してお尋ねします。</h1>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="age">
-                            Age:
+                        年齢：
                             <FontAwesomeIcon icon={faCheck} className={validAge ? "valid" : "hide"}  />
                             <FontAwesomeIcon icon={faTimes} className={validAge || !age ? "hide" : "invalid"} />
                         </label>
@@ -112,7 +112,7 @@ const Register = () => {
                             years old.
                         </p>
 
-                    <label htmlFor="gender">Gender:  </label>
+                    <label htmlFor="gender">性別：  </label>
                     <select 
                             id="gender"
                             onChange={(e) => setGender(e.target.value)}
@@ -122,10 +122,10 @@ const Register = () => {
                             onFocus={() => setAgeFocus(true)}
                             onBlur={() => setAgeFocus(false)}
                             >
-                        <option value="">Select...</option>
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                        <option value="0">Other</option>
+                        <option value="">選択してください</option>
+                        <option value="1">男性</option>
+                        <option value="2">女性</option>
+                        <option value="0">回答しない</option>
                     </select>
                        
                         <button disabled={!validAge ||!gender  ? true : false}>Submit</button>
