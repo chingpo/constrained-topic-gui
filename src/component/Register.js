@@ -12,12 +12,6 @@ const REGISTER_URL = '/register';
 const Register = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    
-    useEffect(() => {
-        if (localStorage.getItem('finish')) {
-        navigate('/logout');
-        }
-    }, [navigate]);
 
     const ageRef = useRef();
     const errRef = useRef();
@@ -47,7 +41,8 @@ const Register = () => {
         // if button enabled with JS hack
         const v1 = AGE_REGEX.test(age);
         if (!v1) {
-            setErrMsg("Invalid Entry");
+            // setErrMsg("Invalid Entry");
+            setErrMsg("無法な入力です。");
             return;
         }
         try {
@@ -128,7 +123,7 @@ const Register = () => {
                         <option value="0">回答しない</option>
                     </select>
                        
-                        <button disabled={!validAge ||!gender  ? true : false}>Submit</button>
+                        <button disabled={!validAge ||!gender  ? true : false}>登録する</button>
                     </form>
                 </section>
                 </div>

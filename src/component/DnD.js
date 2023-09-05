@@ -7,52 +7,61 @@ import useAxiosPrivate from "../hook/useAxiosPrivate";
 import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
-
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import back from "../go-back.png";
+import { useNavigate } from "react-router-dom";
 
 export default function DnD() {
     const { cluster_ids, column_limit } = useLocation().state;
     const [items, setItems] = useState();
     let round = parseInt(localStorage.getItem("round")) || 0;
-
+    const [alertMessage, setAlertMessage] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
+    const displayAlert = (message) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 4000);
+    };
 
     const [data, error, loading, axiosFetch] = useAxiosPrivate();
     const getPatch = () => {
         // in case of refresh
         const oldItems = localStorage.getItem(`old_items_${round}`);
-        if (oldItems) {
-            setItems(JSON.parse(oldItems));
-        } else {
-            axiosFetch({
-                method: 'post',
-                url: '/patches',
-                requestConfig: {
-                    cluster_ids: cluster_ids,
-                    limit: column_limit    
-                }
-            });
-        }
+        axiosFetch({
+            method: 'post',
+            url: '/patches',
+            requestConfig: {
+                cluster_ids: cluster_ids,
+                limit: column_limit
+            }
+        });
     }
-    
+
     useEffect(() => {
         getPatch();
     }, []);
-    
+
     useEffect(() => {
-        if (!loading && !error && data?.data ) {
+        if (!loading && !error && data?.data) {
             console.log(data.data);
-            if (!localStorage.getItem(`old_items_${round}`)) {
-                setItems(data.data.items);
-                localStorage.setItem(`old_items_${round}`, JSON.stringify(data.data.items));
-            }
+            setItems(data.data.items);
+            localStorage.setItem(`old_items_${round}`, JSON.stringify(data.data.items));  
         }
     }, [data, loading, error]);
 
-    const roundPlus = async () => {
+    // ...
+
+    const navigate = useNavigate();
+
+    const roundPlus = async () => {   
+        let old_items = JSON.parse(localStorage.getItem(`old_items_${round}`));
+        // if (!old_items||JSON.stringify(old_items) === JSON.stringify(items)) {
+        //     displayAlert("You didn't move anything, please carefully check and move it.");
+                // displayAlert("操作がないようです。よく観察して、アイテムをドラッグ＆ドロップしてみてください。");
+        //     return; // 阻止跳转
+        // }
         round++;
         localStorage.setItem("round", round);
-        let old_items = localStorage.getItem("old_items")
         // try {
         //     const response = await axiosPrivate.post('/patches-update',
         //         JSON.stringify({ "old_items": old_items, "new_items": items }),
@@ -65,6 +74,7 @@ export default function DnD() {
         // } catch (err) {
         //     console.error(err);
         // }
+        navigate('/display');
     }
 
     const handleDragAndDrop = (result) => {
@@ -76,8 +86,8 @@ export default function DnD() {
         const sourceItems = Array.from(items.find(item => item.id === sourceId).patches);
         const [removed] = sourceItems.splice(result.source.index, 1);
         if (sourceItems.length === 0) {
-            alert('Cannot move the last item from the list');
-            <Alert severity="warning">Cannot move the last item from the list'</Alert>
+            // alert('Cannot move the last item from the list');
+            displayAlert("リストから最後の一つのアイテムを移動することができません");
             return;
         }
 
@@ -94,20 +104,20 @@ export default function DnD() {
 
     return (
         <div>
-
             <div className="dnd-header" >
                 <Typography variant="h6">選択されたトピック: &nbsp;
                     {cluster_ids.map((id, index) => (
                         <Chip key={index} label={<Typography variant="body1">{`トピック ${id}`}</Typography>} variant="outlined" />
                     ))}
                 </Typography>
-                <Link to='/display' style={{ textDecoration: 'none' }}>
-                    <button onClick={roundPlus}  style={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={back} alt="Back" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
-                        送信</button>
-                </Link>
+
+                <button onClick={roundPlus} style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={back} alt="Back" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
+                    送信</button>
+
             </div>
             <LinearProgressWithLabel round={round * 25 + 12.5} />
+            {showAlert && <Alert severity="warning">{alertMessage}</Alert>}
             {items?.length ? (
                 <div className="dnd-display">
                     <DragDropContext onDragEnd={handleDragAndDrop}>

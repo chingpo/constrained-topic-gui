@@ -4,6 +4,8 @@
     height:40rem;
     align-items: center;
     /* padding-top: 20px; */
+    width: 100%; /* 设置图表的宽度 */
+    overflow: auto; 
     }
   
   .projection{
@@ -13,8 +15,7 @@
   .chart-part svg {
     position:absolute;
     width: 100%;
-    height: 100%;
-    
+    height: 100%;  
     /* padding:0; */
     /* padding: 1rem 0.5rem 1rem; */
   }
@@ -47,5 +48,16 @@
     margin-left: 25px;
   }
  
+  .topic-select a {
+    text-decoration: none;
+}
   
+  .topic-select button {
+    display: flex;
+    align-items: center;
+}
 
+.topic-select button img {
+    margin-right: 5px;
+    width: 1.4rem;
+}

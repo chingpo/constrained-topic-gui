@@ -1,7 +1,7 @@
 import React,{ useState,useEffect,useRef } from 'react';
 import "../App.css"
 import { Outlet } from "react-router-dom"
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,9 +11,15 @@ import guide from '../guide.png';
 
 function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showGuideline, setShowGuideline] = useState(false);
   const [highlightButton, setHighlightButton] = useState(null);
   
+  useEffect(() => {
+    if (localStorage.getItem('finish')) {
+    navigate('/logout');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     let timer;

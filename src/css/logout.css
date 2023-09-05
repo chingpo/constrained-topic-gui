@@ -4,45 +4,73 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    height: 80vh;
     width: 100%;
     background-color: #f0f0f0; 
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    overflow: auto;
   }
   
   .thanks-text {
-    font-size: 24px; /* Adjust this value as needed */
-    color: #333; /* Dark grey text */
-    border: 1px solid #ddd; /* Light grey border */
+    font-size: 24px; 
+    color: #333; 
+    border: 1px solid #ddd; 
     padding: 20px;
     border-radius: 10px;
-    background-color: #fff; /* White background */
+    background-color: #fff; 
   }
 
-  .final-rate {
-    font-size: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50%; /* 设置宽度为页面的60% */
-    margin: 0 auto; /* 居中 */
+
+.final-rate {
+  list-style-type: none;
+  width: 55%; 
+  margin-top: 1rem;
+}
+.final-rate h2 {
+  color: #333; 
+    font-size: 1.5rem;
+    text-align: center; 
+    /* margin-bottom: 1rem;  */
 }
 
+.final-rate li {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.final-rate li p {
+  /* margin-bottom: 10px; */
+}
+
+.final-rate button {
+  display: block;
+  margin: auto;
+  margin-bottom: 1rem;
+}
+
+
 .likertLegend {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row; /* 设置为行方向 */
-    flex-wrap: wrap; /* 允许换行 */
-    justify-content: center; /* 水平居中 */
-    width: 100%; /* 占满父元素的宽度 */
+    /* margin-bottom: 1px; */
+    /* display: flex; */
+    /* flex-direction: row;  */
+    /* flex-wrap: wrap;  */
+    /* justify-content: center;  */
+    /* width: 100%;  */
 }
 
 .likertBand {
     flex-grow: 0;
-    width: 100%; /* 占满父元素的宽度，强制换行 */
+    width: 100%; 
+    transform: scale(0.8); /* 整体缩放比例 */
 }
 
+.likertText{
+  font-size: 0.8em; /* 单独轴上的字的大小 */
+
+}
   
   fieldset.likertScale .likertIndicator {
 /*     

@@ -14,8 +14,8 @@ import ClusterGraph from "./ClusterGraph";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-
 import next from "../next.png";
+import submit from "../submit.png";
 
 function Display() {
 
@@ -73,10 +73,14 @@ function Display() {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleRateSubmit} disableBackdropClick>
-        <DialogTitle>Please rate!</DialogTitle>
+      <Dialog open={open} onClose={(event, reason) => {
+        if (reason !== 'backdropClick' && reason !== 'escapeKeyDown') {
+          handleRateSubmit();
+        }
+      }}>
+        <DialogTitle>評価してください！</DialogTitle>
         <DialogContent>
-          <Typography component="legend">how do you score the clustering group</Typography>
+          <Typography component="legend">クラスタリンググループには、何つ星をつけますか？</Typography>
           <div className="rating-container">
             <Rating
               name="simple-controlled"
@@ -89,13 +93,10 @@ function Display() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleRateSubmit} disabled={score === 0}>submit</Button>
+          <Button onClick={handleRateSubmit}>確認</Button>
         </DialogActions>
 
       </Dialog>
-
-
-
 
       <div className="display-header">
         <div className="instruction-text">
@@ -112,8 +113,18 @@ function Display() {
             {round < 4 ?
               <>
                 <select value={database} onChange={handleDatabaseChange}>
-                  <option value="coco">COCO</option>
-                  <option value="stl">STL</option>
+                  {/* <option value="all">All</option>
+                  <option value="animal">Animal</option>
+                  <option value="person">Person</option>
+                  <option value="vehicle">Vehicle</option>
+                  <option value="indoor">Indoor</option>
+                  <option value="food">Food</option> */}
+                  <option value="all">全部</option>
+                  <option value="animal">動物</option>
+                  <option value="person">人間</option>
+                  <option value="vehicle">乗り物</option>
+                  <option value="indoor">室内</option>
+                  <option value="food">食物</option>
                 </select>
                 <select
                   value={cluster_ids.sort().toString()}
@@ -135,13 +146,13 @@ function Display() {
           {round > 3 ?
             // <></>   
             // test environment
-            <Link to="/logout">
-              <button >提出</button>
+            <Link to="/logout" >
+              <button> <img src={submit} alt="Submit" />提出する</button>
             </Link>
             :
-            <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }} style={{ textDecoration: 'none' }}>
-              <button style={{ display: 'flex', alignItems: 'center' }} disabled={!isValidTopic}>
-              <img src={next} alt="Next" style={{ marginRight: '5px', width: '1.4rem'}} />プレー</button></Link>}
+            <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }}>
+              <button disabled={!isValidTopic}>
+                <img src={next} alt="Next"/>続ける</button></Link>}
         </div>
 
       </div>

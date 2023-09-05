@@ -43,17 +43,38 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
   const handleClose = () => {
     setShowAlert(false);
   };
-  setTimeout(handleClose, 8000);
+  useEffect(() => {
+    if (showAlert) {
+      const timer = setTimeout(handleClose, 8000);//8s后自动关闭
+      return () => clearTimeout(timer); // 清除定时器
+    }
+  }, [showAlert]);
 
   const renderChart = () => {
     d3.select(svgRef.current).selectAll("*").remove();
     // pass d3 x,y to canvas
     let xScale = d3.scaleLinear().domain(d3.extent(data, d => d.x)).range([0, width]);
     let yScale = d3.scaleLinear().domain(d3.extent(data, d => d.y)).range([0, 600]);
+    let brush = d3.brush()
+    .extent([[0, 0], [width, height]])
+    .on("end", function(event) {
+        // 在brush结束后，如果有选中的区域，就更新zoom的范围
+        if (!event.selection) return;
+        let [[x0, y0], [x1, y1]] = event.selection;
+        let new_xScale = d3.scaleLinear().domain([x0, x1]).range([0, width]);
+        let new_yScale = d3.scaleLinear().domain([y0, y1]).range([0, height]);
+
+        // 更新图表的x和y坐标
+        images.attr('x', d => new_xScale(d.x))
+              .attr('y', d => new_yScale(d.y));
+        rects.attr('x', d => new_xScale(d.x))
+             .attr('y', d => new_yScale(d.y));
+    });
 
     // click event
     let svg = d3
       .select(svgRef.current);
+      // .call(brush);
 
     let images = svg.selectAll('image')
       .data(data)
@@ -90,8 +111,9 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
 
     <div>
       {showAlert && 
-         <Alert severity="info" onClose={handleClose}>
-         It's enough! After 5 topics been choosed you can click play now.
+         <Alert onClose={handleClose}>
+         {/* It's enough! After 5 topics been choosed you can click play now. */}
+         五つトピックは十分です。「続ける」をクリックしてください。
        </Alert>
          }
 

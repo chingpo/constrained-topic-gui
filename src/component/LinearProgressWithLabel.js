@@ -7,7 +7,21 @@ import Box from '@mui/material/Box';
 export default function LinearWithValueLabel({round}) {
   const completedSegments = Math.floor(round / 25);
   const currentSegmentProgress = (round % 25) * 4;
-
+  let message;
+  console.log(currentSegmentProgress);
+  switch (true) {
+    case (round === 0):
+        message = `ラウンド ${completedSegments} が完了しました。`;
+        break;
+    case (round === 12.5):
+        message = "写真移動後、'送信' をクリックしてください。";
+        break;
+    case (round === 100):
+        message = "クラスタリングの更新はすべて完了しました。";
+        break;
+    default:
+        message = `ラウンド ${completedSegments} が完了しました。`;
+}
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
     {[1, 2, 3, 4].map((segment, index) => (
@@ -18,10 +32,10 @@ export default function LinearWithValueLabel({round}) {
         />
       </Box>
     ))}
-    <Box sx={{ minWidth: 150 }}>
-      <Typography variant="body2" color="text.secondary">
-       round {completedSegments} completed
-      </Typography>
+      <Box sx={{ minWidth: 150 }}>
+            <Typography variant="body2" color="text.secondary">
+            {message}
+            </Typography>
     </Box>
   </Box>
   
