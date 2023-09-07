@@ -43,7 +43,7 @@ export default function DnD() {
 
     useEffect(() => {
         if (!loading && !error && data?.data) {
-            console.log(data.data);
+            // console.log(data.data);
             setItems(data.data.items);
             localStorage.setItem(`old_items_${round}`, JSON.stringify(data.data.items));  
         }

@@ -8,10 +8,9 @@ export default function LinearWithValueLabel({round}) {
   const completedSegments = Math.floor(round / 25);
   const currentSegmentProgress = (round % 25) * 4;
   let message;
-  console.log(currentSegmentProgress);
   switch (true) {
     case (round === 0):
-        message = `ラウンド ${completedSegments} が完了しました。`;
+        message = `トピックを選択し、続けるをクリック`;
         break;
     case (round === 12.5):
         message = "写真移動後、'送信' をクリックしてください。";

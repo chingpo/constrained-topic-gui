@@ -16,7 +16,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import next from "../next.png";
 import submit from "../submit.png";
-import Chip from '@mui/material/Chip';
 
 function Display() {
 
@@ -40,12 +39,12 @@ function Display() {
 
   const [cluster_ids, setClusters] = useState([]);
   const [isValidTopic, setIsValidTopic] = useState(false);
-  const handleDelete = (idToDelete) => {
-    setClusters((prevClusterIds) => prevClusterIds.filter((id) => id !== idToDelete));
-};
+  const handleSelectChange = (e) => {
+    const selectedTopics = e.target.value ? e.target.value.split(',').map(Number) : [];
+    setClusters(selectedTopics);
+  };
   useEffect(() => {
     setIsValidTopic(cluster_ids.length >= 5);
-    console.log(cluster_ids);
   }, [cluster_ids]);
 
   const [open, setOpen] = useState(false);
@@ -127,15 +126,19 @@ function Display() {
                   <option value="indoor">室内</option>
                   <option value="food">食物</option>
                 </select>
-                {cluster_ids.map((id, index) => (
-                  <Chip
-                      key={index}
-                      label={`トピック ${id}`}
-                      onDelete={() => handleDelete(id)}
-                      className="topic-chip"
-                      style={{ marginLeft: '0.5rem' }}
-                  />
-              ))}
+                <select
+                  value={cluster_ids.sort().toString()}
+                  onChange={handleSelectChange}
+                  className="custom-select"
+                >
+                  {cluster_ids.length > 0 && <option value={cluster_ids.sort().toString()}>Selected: {cluster_ids.join(', ')}</option>}
+                  <option value="">Select...</option>
+                  {topicGroups.map((group, index) => (
+                    <option key={index} value={group.sort().toString()}>
+                      Topic group {index + 1}
+                    </option>
+                  ))}
+                </select>
                 {isValidTopic && <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginTop: '10px', marginLeft: '10px' }} />}
               </> : <></>
             }
@@ -157,7 +160,7 @@ function Display() {
 
       <LinearProgressWithLabel round={round * 25} />
       <div className='projection'>
-        <ClusterGraph cluster_ids={cluster_ids} setClusters={setClusters}  />
+        <ClusterGraph cluster_ids={cluster_ids} setClusters={setClusters} />
       </div>
     </div>
 

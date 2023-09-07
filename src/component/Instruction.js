@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Link} from 'react-router-dom';
-import "../css/disclaimer.css"
+import "../css/disclaimer.css";
+import guide from '../guide.png';
 
 const Instruction = () =>{
 
@@ -12,7 +13,11 @@ return(
 <li>- 画像のカテゴリーについて確信が持てない場合は、最も適していると思われるクラスターに配置してください。</li>
 <li>- あなたの意見は貴重です！あなたの思慮深い参加が、クラスタリングの嗜好をより理解するのに役立ちます。</li>
 </ul>
-
+    <li>プロセスは以下のとおりです</li>
+    <li style={{ display: 'flex', justifyContent: 'center' }}>
+      <img src={guide} alt="Guide" style={{ width: '65%' }} />
+    </li>
+    <li>具体的な手順は次のとおりです。</li>
 <h2>ステップ1. トピックの選択:</h2>
 <ul>
 <li>- このページでは、トピックとして表示されるクラスタリングの結果を確認できます。</li>

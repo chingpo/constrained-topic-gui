@@ -1,45 +1,28 @@
-import React, { useState, useRef, useEffect } from "react";
-import * as d3 from "d3";
+import React, { useState, useEffect,useCallback } from 'react';
+import { IMG_BASE_URL } from "../api/axios"
 import useWindowSize from "../hook/useWindowSize";
 import Alert from '@mui/material/Alert';
-// import data from "../json/test.json";
-// import data from "../json/20_image_tsne.json"
-import { IMG_BASE_URL } from "../api/axios"
-// import data from "../json/full_image_pca.json";
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import IconButton from '@mui/material/IconButton';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
+import Slider from '@mui/material/Slider';
+import { Stack } from '@mui/material';
+import { Zoom } from '@visx/zoom';
+import { scaleLinear } from '@visx/scale';
+import { RectClipPath } from '@visx/clip-path';
 import data from "../json/nn_projection_pca.json";
-
-
 
 const patch_width = 30
 const patch_height = 30
-const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
-const ClusterGraph = ({ cluster_ids, setClusters }) => {
-  const center_json = [{ "cluster_id": 0, "x": 1.6667003631591797, "y": 55.849369049072266 }, { "cluster_id": 1, "x": 25.46493911743164, "y": 10.570146560668945 }, { "cluster_id": 2, "x": -45.96719741821289, "y": -18.368995666503906 }, { "cluster_id": 3, "x": 33.76463317871094, "y": -32.00864791870117 }, { "cluster_id": 4, "x": 29.78343391418457, "y": 46.52472686767578 }, { "cluster_id": 5, "x": 8.59740161895752, "y": 48.069305419921875 }, { "cluster_id": 6, "x": -4.960295677185059, "y": -15.97167682647705 }, { "cluster_id": 7, "x": 14.687896728515625, "y": 15.44683837890625 }, { "cluster_id": 8, "x": 0.8437662720680237, "y": 25.1026611328125 }, { "cluster_id": 9, "x": 39.28099060058594, "y": 45.60782241821289 }, { "cluster_id": 10, "x": -6.10936975479126, "y": 52.54291915893555 }, { "cluster_id": 11, "x": 43.113792419433594, "y": -32.52210998535156 }, { "cluster_id": 12, "x": -6.088547229766846, "y": 14.045592308044434 }, { "cluster_id": 13, "x": 16.42440414428711, "y": -25.637758255004883 }, { "cluster_id": 14, "x": 35.126708984375, "y": -8.584490776062012 }, { "cluster_id": 15, "x": 22.269224166870117, "y": -10.125810623168945 }, { "cluster_id": 16, "x": -64.36766052246094, "y": -13.329124450683594 }, { "cluster_id": 17, "x": -22.294801712036133, "y": -64.96427917480469 }, { "cluster_id": 18, "x": -11.827675819396973, "y": 27.751506805419922 }, { "cluster_id": 19, "x": 18.28203582763672, "y": 49.6829833984375 }, { "cluster_id": 20, "x": 12.99618148803711, "y": -15.775712966918945 }, { "cluster_id": 21, "x": -17.267559051513672, "y": 7.774327754974365 }, { "cluster_id": 22, "x": 0.7194544672966003, "y": -33.06669998168945 }, { "cluster_id": 23, "x": -39.93769836425781, "y": -44.13722229003906 }, { "cluster_id": 24, "x": -31.467193603515625, "y": -0.9931849837303162 }, { "cluster_id": 25, "x": 19.17205238342285, "y": 35.343379974365234 }, { "cluster_id": 26, "x": 13.739004135131836, "y": 53.87233352661133 }, { "cluster_id": 27, "x": 10.129362106323242, "y": 3.531669855117798 }, { "cluster_id": 28, "x": 15.013781547546387, "y": -42.006622314453125 }, { "cluster_id": 29, "x": 1.25808846950531, "y": -53.73308563232422 }]
-  const home_url = IMG_BASE_URL;
-
-  const svgRef = useRef(null);
-  const [click_cluster_ids, setClickClusterIds] = useState([]);
+const colors = ['#ffff4d', '#d5c1ff', '#f7bdb7', '#8436b5', '#00b300', '#00b300', '#b9f29b', '#e01f22', '#d69d53', '#f7a400', '#3a9efd', '#3e4491', '#292a73', '#1a1b4b', '#660066', '#54007d', '#eabfff', '#b3b300', '#7d7d00', '#0c0d0e'];
+const ClusterGraph = ({ cluster_ids, setClusters   }) => {
   const [height, width] = useWindowSize();
   const [showAlert, setShowAlert] = useState(false);
-  const choose_topic = (d, i) => {
-    if (click_cluster_ids.length >= 5 && !click_cluster_ids.includes(i.cluster_id)) {
-      // alert("It's enough");
-      setShowAlert(true);
-      return; // 如果已经有5个或更多的元素，就不再添加新的元素
-    }
-    setClickClusterIds(prevClickClusterIds => {
-      let updatedClickClusterIds;
-      if (prevClickClusterIds.includes(i.cluster_id)) {
-        // If the cluster_id is already selected, remove it from the array
-        updatedClickClusterIds = prevClickClusterIds.filter(id => id !== i.cluster_id);
-      } else {
-        // If the cluster_id is not selected, add it to the array
-        updatedClickClusterIds = [...prevClickClusterIds, i.cluster_id];
-      }
-      setClusters(updatedClickClusterIds);
-      return updatedClickClusterIds;
-    });
-  }
+  const [showMiniMap, setShowMiniMap] = useState(true);
   const handleClose = () => {
     setShowAlert(false);
   };
@@ -49,80 +32,165 @@ const ClusterGraph = ({ cluster_ids, setClusters }) => {
       return () => clearTimeout(timer); // 清除定时器
     }
   }, [showAlert]);
-
-  const renderChart = () => {
-    d3.select(svgRef.current).selectAll("*").remove();
-    // pass d3 x,y to canvas
-    let xScale = d3.scaleLinear().domain(d3.extent(data, d => d.x)).range([0, width]);
-    let yScale = d3.scaleLinear().domain(d3.extent(data, d => d.y)).range([0, 600]);
-    let brush = d3.brush()
-    .extent([[0, 0], [width, height]])
-    .on("end", function(event) {
-        // 在brush结束后，如果有选中的区域，就更新zoom的范围
-        if (!event.selection) return;
-        let [[x0, y0], [x1, y1]] = event.selection;
-        let new_xScale = d3.scaleLinear().domain([x0, x1]).range([0, width]);
-        let new_yScale = d3.scaleLinear().domain([y0, y1]).range([0, height]);
-
-        // 更新图表的x和y坐标
-        images.attr('x', d => new_xScale(d.x))
-              .attr('y', d => new_yScale(d.y));
-        rects.attr('x', d => new_xScale(d.x))
-             .attr('y', d => new_yScale(d.y));
+  const handleSelectCluster = useCallback((event, cluster) => {
+    setClusters(prevClusters => {
+      if (prevClusters.length >= 5 && !prevClusters.includes(cluster.cluster_id)) {
+        setShowAlert(true);
+        return prevClusters;
+      }
+  
+      return prevClusters.includes(cluster.cluster_id)
+        ? prevClusters.filter(id => id !== cluster.cluster_id)
+        : [...prevClusters, cluster.cluster_id];
     });
+  }, []);
 
-    // click event
-    let svg = d3
-      .select(svgRef.current);
-      // .call(brush);
+  const x_scale = scaleLinear({
+    domain: [Math.min(...data.map(d => d.x)), Math.max(...data.map(d => d.x))],
+    range: [0, width],
+  });
 
-    let images = svg.selectAll('image')
-      .data(data)
-      .enter()
-      .append('image')
-      .attr('width', patch_width)
-      .attr('height', patch_height)
-      .attr('href', d => home_url + d.img_name)
-      .attr('x', d => xScale(d.x))
-      .attr('y', d => yScale(d.y))
-      .on('click', choose_topic);
-
-    let rects = svg.selectAll('rect')
-      .data(data)
-      .enter()
-      .append('rect')
-      .attr('width', patch_width)
-      .attr('height', patch_height)
-      .attr('x', d => xScale(d.x))
-      .attr('y', d => yScale(d.y))
-      .style('fill', 'none')
-      .style('stroke', d => (click_cluster_ids.includes(d.cluster_id) || cluster_ids.includes(d.cluster_id)) ? colors[d.cluster_id % colors.length] : 'none')
-      .style('stroke-width', d => (click_cluster_ids.includes(d.cluster_id) || cluster_ids.includes(d.cluster_id)) ? '3px' : '0px');
-  }
-
-
-  useEffect(() => {
-    renderChart();
-  }, [click_cluster_ids, cluster_ids, width, height]);
-
-
-
+  const y_scale = scaleLinear({
+    domain: [Math.min(...data.map(d => d.y)), Math.max(...data.map(d => d.y))],
+    range: [0, height],
+  });
+  const initialTransform = {
+    scaleX: 1,
+    scaleY: 1,
+    translateX: 0,
+    translateY: 0,
+    skewX: 0,
+    skewY: 0,
+  };
   return (
-
     <div>
-      {showAlert && 
+       {showAlert && 
          <Alert onClose={handleClose}>
          {/* It's enough! After 5 topics been choosed you can click play now. */}
          五つトピックは十分です。「続ける」をクリックしてください。
        </Alert>
          }
 
-      <div className="chart-part">
-        <svg width={width} height={height} ref={svgRef} />
-      </div>
+       <Zoom
+      width={width}
+      height={height}
+      scaleXMin={0.7}
+      scaleXMax={4}
+      scaleYMin={0.7}
+      scaleYMax={4}
+      transformMatrix={initialTransform}
+    >
+      {(zoom) => (
+        <div className="chart-part">
+          <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <Button aria-label="reset" startIcon={<RestartAltIcon />} onClick={zoom.reset}>reset</Button>
+            <Tooltip title="Zoom Out">
+              <IconButton aria-label="remove" onClick={() => zoom.scale({ scaleX: 0.8, scaleY: 0.8 })} ><RemoveIcon /></IconButton>
+            </Tooltip>
+            <Slider
+                  value={zoom.transformMatrix.scaleX}
+                  onChange={(event, newValue) => {
+                  zoom.scale({ scaleX: newValue / zoom.transformMatrix.scaleX, scaleY: newValue / zoom.transformMatrix.scaleY });
+                  }}
+                  min={0.7}
+                  max={4}
+                  step={0.1}
+                  style={{ width: '10rem' }}
+                />
+             <Tooltip title="Zoom In">
+              <IconButton aria-label="add" onClick={() => zoom.scale({ scaleX: 1.2, scaleY: 1.2 })} ><AddIcon /></IconButton>
+            </Tooltip>
+            <Button aria-label="center" startIcon={<CenterFocusStrongIcon />} onClick={zoom.center}>center</Button>
+            <Button onClick={() => setShowMiniMap(!showMiniMap)}>
+            {showMiniMap ? 'Hide' : 'Show'} Mini Map
+          </Button>
+          </Stack>    
+        <svg width={width} height={height} 
+         onTouchStart={zoom.dragStart}
+         onTouchMove={zoom.dragMove}
+         onTouchEnd={zoom.dragEnd}
+         onMouseDown={zoom.dragStart}
+         onMouseMove={zoom.dragMove}
+         onMouseUp={zoom.dragEnd}
+         onMouseLeave={() => {
+           if (zoom.isDragging) zoom.dragEnd();
+         }}
+            style={{
+              cursor: zoom.isDragging ? "grabbing" : "default",
+              touchAction: "none"
+            }}
+            // ref={zoom.containerRef}
+            >
+          {/* 帮助minimap上的position box指定范围变色*/}
+          <RectClipPath id="minimap-clip" width={width} height={height} />
+          {data.map((d, i) => ( 
+            console.log(zoom),
+            <g key={i} transform={zoom.toString()}>
+              {cluster_ids.includes(d.cluster_id) && (
+                <rect
+                  x={x_scale(d.x)}
+                  y={y_scale(d.y)}
+                  width={patch_width}
+                  height={patch_height}
+                  stroke={colors[d.cluster_id%colors.length ]}
+                  strokeWidth="2"
+                  fill="none"
+                />
+              )}
+              <image
+                href={IMG_BASE_URL + d.img_name}
+                x={x_scale(d.x)}
+                y={y_scale(d.y)}
+                width={patch_width}
+                height={patch_height}
+                onClick={event => handleSelectCluster(event, d)}
+                style={{
+                  opacity: cluster_ids.includes(d.cluster_id) ? 0.5 : 1,
+                }}
+              />
+            </g>
+          ))}
+      
+          {showMiniMap && (
+                /* minimap size and position by transform */
+                <g clipPath="url(#minimap-clip)" 
+                transform={`
+                scale(0.25)
+                translate(${width * 4 - width - 70}, ${30})
+                `}
+                //    transform={`
+                // scale(1)
+                // translate(${0}, ${ 0})
+                // `}
+                >  
+                {/* 外边框颜色 */}
+                  <rect width={width} height={height} stroke="black" fill='white' />
+                  {data.map((d, i) => (
+                    <circle
+                      key={i}
+                      cx={x_scale(d.x)} // No need to scale down the coordinates here
+                      cy={y_scale(d.y)} // No need to scale down the coordinates here
+                      r={5} // Set the radius of the circle
+                      fill={colors[d.cluster_id%colors.length]}/>
+                  ))}  
+                  {/* position box over minimap */}
+                  <rect
+                    width={width}
+                    height={height}
+                    fill="gray"
+                    fillOpacity={0.2}
+                    stroke="black"
+                    strokeWidth={4}
+                    transform={zoom.toStringInvert()}/>
+                </g>    
+            )}
+       </svg>
 
-</div>
+        </div>
+        )}
+        </Zoom>
+        </div>
   );
-}
+};
 
 export default ClusterGraph;
