@@ -8,7 +8,7 @@ import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
-import back from "../go-back.png";
+import ReplyIcon from '@mui/icons-material/Reply';
 import { useNavigate } from "react-router-dom";
 
 export default function DnD() {
@@ -55,11 +55,11 @@ export default function DnD() {
 
     const roundPlus = async () => {   
         let old_items = JSON.parse(localStorage.getItem(`old_items_${round}`));
-        // if (!old_items||JSON.stringify(old_items) === JSON.stringify(items)) {
-        //     displayAlert("You didn't move anything, please carefully check and move it.");
-                // displayAlert("操作がないようです。よく観察して、アイテムをドラッグ＆ドロップしてみてください。");
-        //     return; // 阻止跳转
-        // }
+        if (!old_items||JSON.stringify(old_items) === JSON.stringify(items)) {
+            displayAlert("You didn't move anything, please carefully check and move it.");
+                displayAlert("操作がないようです。よく観察して、アイテムをドラッグ＆ドロップしてみてください。");
+            return; // 阻止跳转
+        }
         round++;
         localStorage.setItem("round", round);
         // try {
@@ -111,9 +111,8 @@ export default function DnD() {
                     ))}
                 </Typography>
 
-                <button onClick={roundPlus} style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src={back} alt="Back" style={{ marginRight: '10px', width: '1.4rem', verticalAlign: 'middle' }} />
-                    送信</button>
+                <button onClick={roundPlus} >
+                <ReplyIcon/>送信</button>
 
             </div>
             <LinearProgressWithLabel round={round * 25 + 12.5} />
@@ -122,20 +121,20 @@ export default function DnD() {
                 <div className="dnd-display">
                     <DragDropContext onDragEnd={handleDragAndDrop}>
                         <div className="list-grid">
-                            {items.map((item) => (
-                                <Droppable droppableId={item.id}>
-                                    {(provided) => (
-                                        <div className="drop-column" {...provided.droppableProps} ref={provided.innerRef}>
-                                            <div className="semantic-header">
-                                                <h3>{item.cluster_id}</h3>
-                                            </div>
-
+                            {items.map((item,index) => (
+                                <div className="each-grid"  key={item.cluster_id}>
+                                    <div className="semantic-header">
+                                        <h3>{item.cluster_id}</h3>
+                                    </div>
+                                <Droppable droppableId={item.id} key={item.id} index={item.id} >
+                                    {(provided,snapshot) => (
+                                      <div className={`drop-column ${snapshot.isDraggingOver ? 'dragging-over' : ''} ${snapshot.isDraggingFrom ? 'dragging-from' : ''}`} {...provided.droppableProps} ref={provided.innerRef}>
                                             <div className="patches-container">
                                                 {item.patches.map((patch, index) => (
                                                     <Draggable draggableId={patch.img_id} index={index} key={patch.img_id}>
-                                                        {(provided) => (
-                                                            <div className="patch-solo"  {...provided.dragHandleProps}  {...provided.draggableProps}
-                                                                ref={provided.innerRef} >
+                                                        {(provided,snapshot) => (
+                                                            <div className={`patch-solo ${snapshot.isDragging ? 'dragging' : ''}`} {...provided.dragHandleProps}  {...provided.draggableProps}
+                                                            ref={provided.innerRef} >
                                                                 <img src={patch.url} style={{ height: "100%", width: "100%", objectFit: "cover" }}></img>
                                                             </div>
                                                         )}
@@ -145,11 +144,10 @@ export default function DnD() {
                                             </div>
                                         </div>
                                     )}
-
                                 </Droppable>
+                                </div>
                             ))}
                         </div>
-
                     </DragDropContext>
                 </div>)
                 :

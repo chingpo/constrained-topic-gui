@@ -102,9 +102,7 @@ const Register = () => {
                         />
                         <p id="uidnote" className={ageFocus && age && !validAge ? "instructions" : "offscreen"}>
                             <FontAwesomeIcon icon={faInfoCircle} />
-                            You Must be older then <br />
-                            18 and younger then 99 <br />
-                            years old.
+                           あなたは18歳以上99歳以下でなければなりません。
                         </p>
 
                     <label htmlFor="gender">性別：  </label>

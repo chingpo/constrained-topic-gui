@@ -1,9 +1,8 @@
 /* dnd css */
 .dnd-display {
-    padding: 10px;
+    /* padding: 10px; */
     /* // border: 4px solid indianred; */
     border-radius: 6px;
-    overflow-y: auto;
     height: 600px;
     width: 70%;
     margin: 0 auto;
@@ -14,36 +13,40 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 4px;
   }
+
+  .each-grid {
+    border-radius: 10px;
+    overflow: hidden; 
+}
   
+  .semantic-header {
+    background: #2d2d2d;
+    text-align: center;
+    color:white;
+    padding: 5px;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
   .drop-column{
     padding: 10px;
-    border-radius: 10px;
     background: #f4f4f4;
     overflow-y: auto;
     height: 600px
   }
   
-  
-  .semantic-header {
-    text-align: center;
-    padding: 5px;
-  }
-  
   .patches-container {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    margin: 0 0 8px 0;
     display: grid;
-    grid-gap: 20px;
+    grid-gap: 10px;
     flex-direction: column;
   }
   
-  
-  .patch-img {
-    height: 100%;
-    width: 100%;
-    object-fit:cover;
+  .dragging {
+    border: 2px solid #27183F; 
   }
-
+  .dragging-over {
+    background-color: #FFF9CB;
+  }
   .dnd-header {
     display: flex;
   justify-content: space-between;
