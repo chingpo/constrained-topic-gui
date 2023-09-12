@@ -280,14 +280,11 @@ function Display() {
         </div>
 
         <div className='topic-select'>
-          <div >
-            
-            
-          </div>
           {round > 3 ?
             null
             :
             <>
+            <div>
             <SubjectSelect setData={setData}/>
             {cluster_ids.map((id, index) => (
               <Chip
@@ -299,10 +296,12 @@ function Display() {
               />
             ))}
             {isValidTopic && <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginTop: '10px', marginLeft: '10px' }} />}
+            </div>
             <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }}>
               <button disabled={!isValidTopic}>
                 <ArrowForwardIcon />続ける</button></Link>
-                </>}
+                </>
+                }
         </div>
 
       </div>

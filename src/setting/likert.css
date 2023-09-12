@@ -1,0 +1,99 @@
+.likertScale {
+    margin-bottom: 1em;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .likertScale.layout--stacked {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .likertLegend {
+    flex: 1 1 auto;
+  }
+  .likertBand {
+    flex-grow: 4; /* This can get overridden by the “flexible” prop. */
+    flex-shrink: 0;
+    flex-basis: auto;
+  
+    display: flex;
+    padding-top: 0.6em;
+  }
+  .layout--stacked .likertBand {
+    align-self: stretch;
+  }
+  .likertResponse {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0; /* never set to auto */
+    min-width: 1.6em;
+    text-align: center;
+    position: relative;
+  }
+  .likertLine {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+    margin-top: 0.5em;
+    border-top: 3px solid dimgray;
+  }
+  .likertResponse:first-child .likertLine:first-child {
+    visibility: hidden;
+  }
+  .likertResponse:last-child > .likertLine:nth-child(2) {
+    visibility: hidden;
+  }
+  .likertIndicator {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    border: thin solid #006fc4;
+    background-color: #faeabd;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    box-sizing: border-box;
+    transition: all linear 200ms;
+  }
+  .likertResponse:hover .likertIndicator {
+    background-color: white;
+    border-width: 3px;
+    transition: all linear 200ms;
+  }
+  .likertText {
+    display: inline-block;
+    padding-top: 0.4em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .likertScale.isKeyboardUser .likertResponse > input:focus ~ .likertIndicator {
+    /* Show outline for keyboard users. */
+    box-shadow: 0 0 5px 2px rgba(0, 119, 195, 0.5);
+  }
+  .likertResponse > input:checked + .likertIndicator {
+    background-color: #006fc4;
+  }
+  .visuallyHidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+  }
+  
+  @media only print {
+    .likertResponse > input:checked + .likertIndicator {
+      border-width: 0.5em !important;
+      border-color: black !important;
+    }
+  }

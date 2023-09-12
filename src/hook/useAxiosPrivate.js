@@ -1,8 +1,10 @@
+import { set } from "d3";
 import { axiosPrivate } from "../api/axios";
 import { useEffect,useState } from "react";
+import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
-    const token = localStorage.getItem('token');
+    const { auth,setAuth } = useAuth();
     const [response, setResponse] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false); //different!
@@ -38,8 +40,8 @@ const useAxiosPrivate = () => {
         const requestIntercept = axiosPrivate.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${token}`;
-                    console.log("token set",token);
+                    config.headers['Authorization'] = `Bearer ${auth?.access_token}`;
+                    console.log("token set",auth);
                 }
                 return config;
             }, (error) => Promise.reject(error)
@@ -60,7 +62,7 @@ const useAxiosPrivate = () => {
             axiosPrivate.interceptors.response.eject(responseIntercept);
             controller && controller.abort();
         }
-    }, [token, controller])
+    }, [auth, controller])
  
     return [response, error, loading, axiosFetch];
 }

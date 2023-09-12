@@ -33,7 +33,7 @@
     /* margin-bottom: 1rem;  */
 }
 
-.final-rate li {
+.final-rate > ol >li {
   background-color: #fff;
   margin-bottom: 10px;
   padding: 20px;
@@ -45,7 +45,8 @@
   /* margin-bottom: 10px; */
 }
 
-.final-rate button {
+
+.final-rate-button {
   display: block;
   margin: auto;
   margin-bottom: 1rem;
@@ -80,4 +81,14 @@
   }
 
 
+  .MuiRating-iconFilled:last-child {
+    border-right: none;
+  }
 
+  .MuiRating-iconFilled {
+    border-right: none;
+  }
+
+  .MuiRating-iconEmpty {
+    border-right: none;
+  }

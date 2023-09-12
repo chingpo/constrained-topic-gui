@@ -1,95 +1,70 @@
+import {React,useEffect} from 'react';
+import { useLocation } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import useAuth from "../hook/useAuth.js";
 
-import '../css/logout.css';
-import {  useEffect, useState } from "react";
-import useAxiosPrivate from "../hook/useAxiosPrivate";
-import Likert from "react-likert-scale";
-import TextField from '@mui/material/TextField';
+
+const ThanksMessage = ({ children }) => (
+  <Box
+    className="thanks-container"
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#f5f5f5',
+      padding: '2rem',
+      textAlign: 'center',
+    }}
+  >
+    <Box
+      className="thanks-text"
+      sx={{
+        backgroundColor: '#fff',
+        borderRadius: '8px',
+        padding: '2rem',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+      }}
+    >
+      <Typography variant="h6">{children}</Typography>
+    </Box>
+  </Box>
+);
 
 const Thanks = () => {
-    const CHARACTER_LIMIT = 100;
-    const [comment, setComment] = useState('');
-    const [likertValue, setLikertValue] = useState(null);
+  const { setAuth } = useAuth();
+  const token=localStorage.getItem('token');
+  useEffect(() => {
+    if (token === 'expired' || token === 'finish') {
+      setAuth({});
+    }
+  }, []);
 
-    // production env remove
-    // localStorage.clear();
-    // Object.keys(localStorage).forEach(key => {
-    //     if (key !== 'finish') {
-    //       localStorage.removeItem(key);
-    //     }
-    //   });
+  if (token === 'expired') { 
+    console.log("expired");
+    return (
+      <ThanksMessage>
+        長時間使用しない場合、自動的にログアウトされ、現在の実験が無効になります。
+        ご協力ありがとうございました。
+      </ThanksMessage>
+    );
+  } else if (token === 'finish') {
+    console.log("finish");
+    return (
+      <ThanksMessage>
+        ご協力ありがとうございました。
+      </ThanksMessage>
+    );
+  } else{
+    console.log("no show")
+    return (
+      <ThanksMessage>
+        You do not have access to the requested page.
+      </ThanksMessage>
+    );
+  }
+};
 
-    const [finish, setFinish] = useState(localStorage.getItem('finish') === 'true');
-    const [rate, error, _, axiosFetch] = useAxiosPrivate();
-
-    const handleSubmit = () => {
-          console.log('Likert值: ', likertValue);
-          console.log('评论: ', comment);
-          // axiosFetch({
-          //   method: 'POST',
-          //   url: '/rate',
-          //   requestConfig: {
-          //     type: "end",
-          //     likert: likertValue,
-          //     comment: comment  
-          //   }
-          // });
-          localStorage.setItem('finish', 'true');
-          setFinish(true);
-      };
-    
-
-    const likertOptions = {
-        question: "最終的なクラスタリングは初期状態よりも良いと思いますか？（必填）",
-        responses: [
-          { value: 1, text: "全く同意しない" },
-          { value: 2, text: "同意しない" },
-          { value: 3, text: "ある程度同意しない" },
-          { value: 4, text: "どちらでもない" },
-          { value: 5, text: "ある程度同意する" },
-          { value: 6, text: "同意する" },
-          { value: 7, text: "全く同意する" }
-        ],
-        onChange: (val) => {
-            setLikertValue(val.value);
-          }       
-        }
-
-    return ( 
-        <div className="thanks-container">  
-             <div className='final-rate'>
-                <ol>
-                  <li>
-                    <h3>実験終了,アンケートにご協力をお願いいたします。</h3>
-                    <p>it‘s all about the understanding of the clustering result.</p>
-                  </li>
-                  <li><Likert {...likertOptions} className="likert-scale" /></li>
-                  <li>
-                    <p>この実験についてのあなたのコメントは何ですか。（必填）</p>
-                    <TextField
-                      multiline
-                      fullWidth
-                      minRows={2}
-                      maxRows={4}
-                      inputProps={{ maxLength: CHARACTER_LIMIT }}
-                      variant="outlined"
-                      placeholder="何でも入力してください…"
-                      helperText={`${comment.length}/${CHARACTER_LIMIT}`}
-                      value={comment}
-                      onChange={e => setComment(e.target.value)}
-                    />
-                  </li>
-                  <button variant="contained" onClick={handleSubmit}>提出する</button>
-                </ol>
-              </div>
-             {/* {!finish ?:
-            <div >
-                <p className="thanks-text">
-                    ご協力ありがとうございました。
-                </p> 
-            </div>  }      */}
-        </div>
-      
-    )
-}
-
-export default Thanks
+export default Thanks;

@@ -1,47 +1,34 @@
-import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { useNavigate,useLocation, Navigate, Outlet } from "react-router-dom";
 import { useState, useEffect } from 'react';
+import Thanks from "./Thanks";
+import useAuth from "../hook/useAuth.js";
+
 
 const RequireAuth = () => {
     const location = useLocation();
-    const [token, setToken] = useState(localStorage.getItem('token'));
-    
-    const handleStorageChange = () => {
-        setToken(localStorage.getItem('token'));
-      };
-    useEffect(() => { 
-        window.addEventListener('storage', handleStorageChange);
-        return () => window.removeEventListener('storage', handleStorageChange);
-      }, [token]);
+    const { auth } = useAuth();
+    const token=localStorage.getItem('token');
 
-    //   const finish=localStorage.getItem('finish');
-    // if (finish) {
-    //     return (
-    //         <div className="thanks-container">
-    //         <div className="thanks-text">
-    //             <p>
-    //             ご協力ありがとうございました。
-    //             </p>
-    //         </div>
-    //         </div>
-    //     );    
-    // } else
-    if (token === 'expired'){
-        console.log("get token expired");
-        return (
-            <div className="thanks-container">
-            <div className="thanks-text">
-                <p>
-                長時間使用しない場合、自動的にログアウトされ、現在の実験が無効になります。
-                    ご協力ありがとうございました。
-                </p>
-            </div>
-            </div>
-        );
-    }else if (token) {
-        return <Outlet />; // make auth work on all children route
-    } else {
-        return <Navigate to="/register" state={{ from: location }} replace />;
-    }
+    console.log("auth",auth);
+console.log('auth type:', typeof auth);
+console.log('auth is array:', Array.isArray(auth));
+console.log('auth has access_token:', 'access_token' in auth);
+    if (token === 'expired' || token === 'finish') {
+        console.log('wired',auth);
+        return  <Navigate to="/logout" state={{ from: location }} replace />;
+      } else if ((Array.isArray(auth) && auth.length === 0) && location.pathname !== '/register') {
+        console.log('wired2',auth);
+        return <Navigate to="/register" state={{ from: location }} replace />;   
+      }  else if(auth.access_token){
+        console.log('wired3',auth);
+        return <Outlet/>;
+      }else if(Object.keys(auth).length === 0 && auth.constructor === Object && location.pathname !== '/register'){
+        console.log('wired2ddd',location.pathname);
+        return <Navigate to="/register" state={{ from: location }} replace />;   
+      }else{
+        console.log('wired4',auth);
+      }
+     
 }
 
 export default RequireAuth;
