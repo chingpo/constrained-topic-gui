@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import guide from '../guide.png';
+import demo from '../dnd_demo.gif';
 
 function Layout() {
   const location = useLocation();
@@ -15,11 +16,6 @@ function Layout() {
   const [showGuideline, setShowGuideline] = useState(false);
   const [highlightButton, setHighlightButton] = useState(null);
   
-  useEffect(() => {
-    if (localStorage.getItem('finish')) {
-    navigate('/logout');
-    }
-  }, [navigate]);
 
   useEffect(() => {
     let timer;
@@ -62,15 +58,15 @@ function Layout() {
      
       <div>
         <header className="header">
-          <h1>画像トピック化実験</h1>
+          <h1>画像グループ分け実験</h1>
           {(location.pathname === '/display' || location.pathname === '/dnd') && <button onClick={handleGuidelineOpen} style={{ border: '1px solid hsla(0,0%,100%,.2)', 
       boxShadow: highlightButton ? '0 0 10px white' : 'none'  
       }}>ユーザーガイド</button>}
           <Dialog open={showGuideline} onClose={handleGuidelineClose}>
             <DialogTitle>操作手順</DialogTitle>
             <DialogContent>
-              <p>操作は以下の通りです。4回のループの後に、「提出」をクリックしてください。</p>
-              <img src={guide} alt="Guide" style={{width: '100%'}} />
+              <p>操作は以下の通りです。4回のループの後に、質問を答え「提出」をクリックしてください。</p>
+              <img src={demo} alt="Guide" style={{width: '100%'}} />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleGuidelineClose}>OK</Button>

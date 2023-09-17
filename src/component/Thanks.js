@@ -46,8 +46,7 @@ const Thanks = () => {
     console.log("expired");
     return (
       <ThanksMessage>
-        長時間使用しない場合、自動的にログアウトされ、現在の実験が無効になります。
-        ご協力ありがとうございました。
+        長時間操作がなかった場合、自動的にログアウトされ、実験が無効になります。
       </ThanksMessage>
     );
   } else if (token === 'finish') {

@@ -14,11 +14,13 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageList from '@mui/material/ImageList';
-import data from "../json/nn_projection_pca.json";
+import data from "../json/topic_image_nn.json";
 import { IMG_BASE_URL } from "../api/axios"
+import useAuth from "../hook/useAuth.js";
 
 const Question = () => {
   const CHARACTER_LIMIT = 100;
+  const { setAuth} = useAuth();
   const [comment, setComment] = useState('');
   const [likertValues, setLikertValues] = useState(
     Array.from({ length: data.cluster_id_range }, () => -1)
@@ -28,10 +30,9 @@ const Question = () => {
   const navigate = useNavigate();
   const [errMsg, setErrMsg] = useState('');
   const handleSubmit = () => {
-    setErrMsg('');
     for (let i = 0; i < data.cluster_id_range; i++) {
       if (likertValues[i] == -1) {
-          setErrMsg(`質問${i + 1}未記入です。`);
+          setErrMsg(`質問${i + 1}が未記入です。`);
           setOpenAlert(true);
           return;
       }
@@ -51,8 +52,9 @@ const Question = () => {
               comment: comment  
             }
           });
-          localStorage.setItem('token', 'finish');
-          navigate('/logout'); 
+        console.log('finish')
+        localStorage.setItem('token', 'finish');
+        navigate('/logout'); 
   };
 
   return (
@@ -64,7 +66,7 @@ const Question = () => {
               アンケート
             </Typography>
             <Typography variant="body1">
-              結果のクラスタリングの理解についていくつかの質問があります。ご協力お願いします。
+            グループ分けの結果について、以下の質問に答えてください。
             </Typography>
           </li>
 
@@ -77,7 +79,7 @@ const Question = () => {
                       </Tooltip></Typography>)}
              
               <Likert
-                question={'この写真グループはトッピクを明確に強調できます。'}
+                question={'適切にグループ分けされている。'}
                 responses={likertSeven}
                 id={index}
                 className="likert-scale"
@@ -119,7 +121,7 @@ const Question = () => {
 
             <li>
                      <Typography component="span">
-                     参加した感想を自由に教えてください。
+                     作業の感想を自由に教えてください。（例：どういう基準で並び替えましたか？作業の難易度はどうでしたか？グルーピングがうまくいったと思いますか？など）
                        <Tooltip title="必須">
                          <Typography component="span" color="error">*</Typography>
                        </Tooltip>

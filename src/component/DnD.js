@@ -56,7 +56,7 @@ export default function DnD() {
     const roundPlus = async () => {   
         let old_items = JSON.parse(localStorage.getItem(`old_items_${round}`));
         if (!old_items||JSON.stringify(old_items) === JSON.stringify(items)) {
-            displayAlert("You didn't move anything, please carefully check and move it.");
+            // displayAlert("You didn't move anything, please carefully check and move it.");
                 displayAlert("操作がないようです。よく観察して、アイテムをドラッグ＆ドロップしてみてください。");
             return; // 阻止跳转
         }
@@ -87,7 +87,7 @@ export default function DnD() {
         const [removed] = sourceItems.splice(result.source.index, 1);
         if (sourceItems.length === 0) {
             // alert('Cannot move the last item from the list');
-            displayAlert("リストから最後の一つのアイテムを移動することができません");
+            displayAlert("１つのグループに少なくとも１枚の画像が含まれている必要があります。");
             return;
         }
 
@@ -105,14 +105,14 @@ export default function DnD() {
     return (
         <div>
             <div className="dnd-header" >
-                <Typography variant="h6">選択されたトピック: &nbsp;
+                <Typography variant="h6">選択されたグループ: &nbsp;
                     {cluster_ids.map((id, index) => (
-                        <Chip key={index} label={<Typography variant="body1">{`トピック ${id}`}</Typography>} variant="outlined" />
+                        <Chip key={index} label={<Typography variant="body1">{`グループ ${id}`}</Typography>} variant="outlined" />
                     ))}
                 </Typography>
 
                 <button onClick={roundPlus} >
-                <ReplyIcon/>送信</button>
+                <ReplyIcon/>並べ替え完了</button>
 
             </div>
             <LinearProgressWithLabel round={round * 25 + 12.5} />

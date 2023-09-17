@@ -4,12 +4,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from '../api/axios';
 // import '../App.css';
 import '../css/register.css';
-import { useNavigate, useLocation } from 'react-router-dom';
+import useAuth from "../hook/useAuth";
+import { useNavigate, useLocation,Link } from 'react-router-dom';
 
 const AGE_REGEX = /^(1[8-9]|[2-9][0-9])$/;
 const REGISTER_URL = '/register';
 
 const Register = () => {
+    const { auth,setAuth} = useAuth();
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token === 'finish' || token === 'expired') {
+          navigate('/logout');
+        }
+      }, []);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -21,7 +29,6 @@ const Register = () => {
     const [ageFocus, setAgeFocus] = useState(false);
     const [gender, setGender] = useState('');
     const [errMsg, setErrMsg] = useState('');
-
 
     useEffect(() => {
         ageRef.current.focus();
@@ -53,12 +60,11 @@ const Register = () => {
                     withCredentials: true
                 }
             );
-            const accessToken = response?.data?.data.access_token;
+            const access_token = response?.data?.data.access_token;
             const user_id = response?.data?.data.user_id;
-            localStorage.setItem('token', accessToken);
-            //clear state and controlled inputs
-            //need value attrib on inputs for this
-            console.log("register",accessToken);
+            localStorage.setItem('token', access_token);
+            setAuth({ user_id, access_token });
+            console.log("register",access_token);
             setAge('');
             setGender('');
             navigate('/disclaimer', { state: { from: location }, replace: true} );

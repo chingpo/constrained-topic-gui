@@ -27,13 +27,14 @@ import Alert from '@mui/material/Alert';
 // import Likert from "react-likert-scale";
 import Likert from "../setting/likert.js";
 import { likertSeven } from '../setting/likertSeven.js';
-import all from "../json/nn_projection_pca.json";
+// import all from "../json/nn_projection_pca.json";
 import animal from "../json/0_image_tsne.json";
 import person from "../json/1_image_tsne.json";
 import vehicle from "../json/2_image_tsne.json";
 import indoor from "../json/3_image_tsne.json";
 import food from "../json/4_image_tsne.json";
 import final_data from "../json/nn_projection_tsne.json";
+import all from "../json/topic_image_nn.json"
 
 function SubjectSelect({setData}) {
   const [subject, setSubject] = useState('all');
@@ -112,7 +113,7 @@ const Cluster_Question = ({ data, setData }) => {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <p>最終的なクラスタリングは初期状態よりも良いと思いますか？</p>
+        <p>最終的なクラスタリングはクラスタリングよりも良いと思いますか？</p>
         <Likert {...likertOptions} className="likert-scale" />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -141,7 +142,8 @@ const Cluster_Question = ({ data, setData }) => {
         onClose={() => setOpenSnackbar(false)}
       >
         <Alert onClose={() => setOpenSnackbar(false)} severity="warning">
-          質問答え未記入です。
+        {/* 回答されていない質問があります。 */}
+        点数を付けてください！
         </Alert>
       </Snackbar>
     </div>
@@ -217,8 +219,8 @@ function Display() {
 
   return (
     <div>
-      <Dialog open={open}>
-        <DialogTitle>本ページの各クラスタを評価してください</DialogTitle>
+      <Dialog open={false}>
+        <DialogTitle>画像のグループ分け結果を評価してください</DialogTitle>
         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Snackbar
             open={openSnackbar}
@@ -226,11 +228,11 @@ function Display() {
             onClose={() => setOpenSnackbar(false)}
           >
             <Alert onClose={() => setOpenSnackbar(false)} severity="warning" sx={{ width: '100%' }}>
-              まだ点数を付けていません！
+            点数を付けてください！
             </Alert>
           </Snackbar>
           {activeStep !== null && (
-            <Likert id={activeStep} question={'この写真グループはトッピクを明確に強調できます。'} responses={likertSeven} onChange={(e) => {
+            <Likert id={activeStep} question={'適切にグループ分けされている。'} responses={likertSeven} onChange={(e) => {
               const newVal = e.value;
               setCurrent(newVal);
             }} />
@@ -269,13 +271,14 @@ function Display() {
           </Typography>
         </MobileStepper>)}
       </Dialog>
+      <LinearProgressWithLabel round={round * 25} />
 
       <div className="display-header">
         <div className="instruction-text">
           {round > 3 ?
             <Cluster_Question data={data} setData={setData}/> :
             // <Typography variant="h6">please slect 5 topic first</Typography>
-            <Typography variant="h6">科目を選択し、興味のあるトピックを5つ選んでください。</Typography>
+            <Typography variant="h6">グループが重なっている箇所からグループを５つ選んでください。</Typography>
           }
         </div>
 
@@ -289,7 +292,7 @@ function Display() {
             {cluster_ids.map((id, index) => (
               <Chip
                 key={index}
-                label={`トピック ${id}`}
+                label={`グループ ${id}`}
                 onDelete={() => handleDelete(id)}
                 className="topic-chip"
                 style={{ marginLeft: '0.5rem' }}
@@ -306,8 +309,6 @@ function Display() {
 
       </div>
 
-
-      <LinearProgressWithLabel round={round * 25} />
       <div className='projection'>
         <ClusterGraph cluster_ids={cluster_ids} setClusters={setClusters} data={data}  />
       </div>
