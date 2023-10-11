@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 
 export default function LinearWithValueLabel({round}) {
   const completedSegments = Math.floor(round / 25);
-  console.log(completedSegments);
   const currentSegmentProgress = (round % 25) * 4;
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

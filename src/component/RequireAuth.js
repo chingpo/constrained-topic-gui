@@ -6,24 +6,24 @@ import useAuth from "../hook/useAuth.js";
 
 const RequireAuth = () => {
     const location = useLocation();
-    const { auth } = useAuth();
-    const token=localStorage.getItem('token');
+    const { auth,setAuth } = useAuth();
+    const access_token = localStorage.getItem('access_token');
+    
+    useEffect(() => {
+      if (Object.keys(auth).length === 0 && auth.constructor === Object) {
+          const user_id = localStorage.getItem('user_id');
+          if (user_id && access_token) {
+              setAuth({ user_id, access_token });
+          }
+      }
+    }, [auth,setAuth]);
+ 
 
-    console.log("auth",auth);
-console.log('auth type:', typeof auth);
-console.log('auth is array:', Array.isArray(auth));
-console.log('auth has access_token:', 'access_token' in auth);
-    if (token === 'expired' || token === 'finish') {
-        console.log('wired',auth);
+    if (access_token === 'expired' || access_token === 'finish') {
         return  <Navigate to="/logout" state={{ from: location }} replace />;
-      } else if ((Array.isArray(auth) && auth.length === 0) && location.pathname !== '/register') {
-        console.log('wired2',auth);
-        return <Navigate to="/register" state={{ from: location }} replace />;   
-      }  else if(auth.access_token){
-        console.log('wired3',auth);
+      } else if(auth.access_token){
         return <Outlet/>;
-      }else if(Object.keys(auth).length === 0 && auth.constructor === Object && location.pathname !== '/register'){
-        console.log('wired2ddd',location.pathname);
+      }else if((!auth.access_token&&!access_token) && location.pathname !== '/register'){
         return <Navigate to="/register" state={{ from: location }} replace />;   
       }else{
         console.log('wired4',auth);

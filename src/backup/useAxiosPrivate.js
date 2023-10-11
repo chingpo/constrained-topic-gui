@@ -5,7 +5,7 @@ import useAuth from "./useAuth";
 // refer gitdagray/react_hooks_axios
 
 const useAxiosPrivate = () => {
-    const { auth } = useAuth();
+    const { auth,setAuth } = useAuth();
     const [response, setResponse] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false); //different!
@@ -17,7 +17,7 @@ const useAxiosPrivate = () => {
             url,
             requestConfig = {}
         } = configObj;
-        // console.log(configObj);
+        console.log(configObj);
         try {
             setLoading(true);
             const ctrl = new AbortController();
@@ -42,6 +42,7 @@ const useAxiosPrivate = () => {
             config => {
                 if (!config.headers['Authorization']) {
                     config.headers['Authorization'] = `Bearer ${auth?.access_token}`;
+                    console.log("access_token set",auth);
                 }
                 return config;
             }, (error) => Promise.reject(error)

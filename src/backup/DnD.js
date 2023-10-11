@@ -10,25 +10,12 @@ import Chip from '@mui/material/Chip';
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import ReplyIcon from '@mui/icons-material/Reply';
 import Snackbar from '@mui/material/Snackbar';
+import useSWR from 'swr'
 import { useNavigate } from "react-router-dom";
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 
-// const clusterMessages = [
-//     'dark', 'green', 'face', 'animal', 'scene,road', 'scene,red', 'shadow', 'wheel', 'round', 'gray', 
-//     'indoor', 'green', 'food', 'animal,texture', 'scene', 'food,red', 'scene,sky,blue', 'wood', 'window', 'animal'
-//   ];
-// const clusterMessages = [
-//     'indoor', 'objects', 'parts,face', 'animal', 'animal,vehicle,road', 'vehicle,scene,red', 'vehicle,indoor,shadow', 'object', 'animal,indoor,round', 'animal,gray', 
-//     'shape,indoor', 'nature,parts,green', 'indoor,food', 'animal,vehicle', 'nature,vehicle', 'food', 'vehicle,indoor', 'indoor', 'indoor', 'animal'
-//   ];
-// const clusterMessages = [
-//         'person', 'outdoor', 'bird', 'aeroplane', 'produce', 'boat', 'wall', 'indoor', 'food', 'background', 
-//         'bike', 'dog', 'table', 'horse', 'train', 'livestock', 'screen', 'car', 'cat', 'bus'
-//       ];
 const clusterMessages = [
-    '0.人', '1.屋外', '2.鳥', '3.飛行機', '4.農産物', '5.船', '6.壁', '7.屋内', '8.食べ物', '9.バックグラウンド',
-    '10.自転車', '11.犬', '12.テーブル', '13.馬', '14.電車', '15.家畜', '16.スクリーン', '17.車', '18.猫', '19.バス'
+    'dark', 'green', 'face,happy', 'animal', 'scene,road', 'scene,red', 'shadow', 'wheel', 'round', 'gray', 
+    'indoor', 'green', 'food', 'animal,texture', 'scene', 'food,red', 'scene,sky,blue', 'wood', 'window', 'animal'
   ];
   
 export default function DnD() {
@@ -60,20 +47,15 @@ export default function DnD() {
     const getPatch = () => {
         // in case of refresh
         const oldItems = localStorage.getItem(`old_items_${round}`);
-        if (oldItems&& oldItems!='undefined') {
-            setItems(JSON.parse(oldItems));
-            return;
-        }else{
-            axiosFetch({
-                method: 'post',
-                url: '/patches',
-                requestConfig: {
-                    round:round,
-                    cluster_ids: cluster_ids,
-                    limit: column_limit
-                }
-            });
-        }    
+        axiosFetch({
+            method: 'post',
+            url: '/patches',
+            requestConfig: {
+                round:round,
+                cluster_ids: cluster_ids,
+                limit: column_limit
+            }
+        });
     }
 
     useEffect(() => {
@@ -88,36 +70,26 @@ export default function DnD() {
 
 
     const navigate = useNavigate();
+
     const roundPlus = async () => {   
-        let old_items = JSON.parse(localStorage.getItem(`old_items_${round}`));
-        if (JSON.stringify(old_items) === JSON.stringify(items)) {
+        let old_items = JSON.parse(localStorage.getItem(old_items));
+        if (!old_items||JSON.stringify(old_items) === JSON.stringify(items)) {
             // displayAlert("You didn't move anything, please carefully check and move it.");
                 displayAlert("操作がないようです。よく観察して、アイテムをドラッグ＆ドロップしてみてください。");
             return; // 阻止跳转
         }
-        let old_patch = old_items.reduce((acc, item) => {
-            acc[item.cluster_id] = item.patches.map(patch => patch.img_id);
-            return acc;
-        }, {});
-        let new_patch = items.reduce((acc, item) => {
-            acc[item.cluster_id] = item.patches.map(patch => patch.img_id);
-            return acc;
-        }, {}); 
-        round =round +1;   
+        round++;
+        localStorage.setItem("round", round);
         axiosFetch({
             method: 'post',
-            url: '/cluster-update',
+            url: '/patches-update',
             requestConfig: {
-                old_items: old_patch,
-                new_items: new_patch,
+                old_items: old_items,
+                new_items: items,
                 round: round
             }
-        }).then(() => {
-            if (!loading) { 
-                localStorage.setItem("round", round); 
-                navigate('/display'); 
-            }
         });
+        navigate('/display');
     }
 
     const handleDragAndDrop = (result) => {
@@ -154,9 +126,8 @@ export default function DnD() {
                     ))}
                 </Typography>
 
-                <button  disabled={loading || round >=4} onClick={roundPlus} >
-                {loading ? <CircularProgress size={24} /> : <ReplyIcon/>}並べ替え完了
-                </button>
+                <button onClick={roundPlus} >
+                <ReplyIcon/>並べ替え完了</button>
 
             </div>
             <Snackbar

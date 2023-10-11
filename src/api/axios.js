@@ -1,6 +1,6 @@
 import axios from 'axios';
-const BASE_URL= 'http://136.187.82.145:18080'
-export const IMG_BASE_URL= 'http://136.187.116.134:18080/web/'
+const BASE_URL= 'http://136.187.116.134:13000'
+export const IMG_BASE_URL= 'http://136.187.116.134:18080/web/topic/topic_patches/'
 export default axios.create({
     baseURL: BASE_URL
 });

@@ -27,95 +27,69 @@ import Alert from '@mui/material/Alert';
 // import Likert from "react-likert-scale";
 import Likert from "../setting/likert.js";
 import { likertSeven } from '../setting/likertSeven.js';
-// import all from "../json/nn_projection_pca.json";
-import animal from "../json/0_image_tsne.json";
-import person from "../json/1_image_tsne.json";
-import vehicle from "../json/2_image_tsne.json";
-import indoor from "../json/3_image_tsne.json";
-import food from "../json/4_image_tsne.json";
-import final_data from "../json/nn_projection_tsne.json";
-import all from "../json/topic_image_nn.json"
+// import all from "../json/topic_image_nn.json"
+// import all from "../json/nn_tsne.json"
+import all from "../json/nn_init_clip.json"
 
-function SubjectSelect({setData}) {
-  const [subject, setSubject] = useState('all');
-  const handleSubjectChange = (e) => {
-    setSubject(e.target.value);
-    switch (e.target.value) {
-      case 'animal':
-        setData(animal);
-        break;
-      case 'person':
-        setData(person);
-        break;
-      case 'vehicle':
-        setData(vehicle);
-        break;
-      case 'indoor':
-        setData(indoor);
-        break;
-      case 'food':
-        setData(food);
-      default:
-        setData(all.data);
-    }
-  };
-  return (
-    <select value={subject} onChange={handleSubjectChange}>
-      <option value="all">全部</option>
-      <option value="animal" title="鳥,猫,牛,犬,馬,羊">動物</option>
-      <option value="vehicle" title="飛行機,自転車,ボート,バス,車,バイク,電車">乗り物</option>
-      <option value="indoor" title="ボトル,椅子,ダイニングテーブル,鉢植えの植物,ソファ,テレビ/モニター">室内</option>
-      <option value="food" title="バナナ,リンゴ,サンドイッチ,オレンジ,ブロッコリー,ニンジン,ホットドッグ,ピザ,ドーナツ,ケーキ">食物</option>
-      <option value="person">人間</option>
-    </select>
-  );
-}
 
-const Cluster_Question = ({ data, setData }) => {
-  const [likertValue, setLikertValue] = useState(null);
+
+const Cluster_Question = ({ getClusterInfo, setData }) => {
+  const [likertValues, setLikertValues] = useState([null, null, null]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [rate, error, _, axiosFetch] = useAxiosPrivate();
   const navigate = useNavigate();
   const handleSubmit = () => {
-    console.log(likertValue);
-    if (likertValue === null) {
+    if (likertValues[0] === null || likertValues[1] === null || likertValues[2] === null) {
       setOpenSnackbar(true);
       return;
     }
+    const likertValuesString = `${likertValues[0]},${likertValues[1]},${likertValues[2]}`;
     axiosFetch({
       method: 'POST',
       url: '/rate',
       requestConfig: {
         type: "compare",
-        likert: likertValue
+        likert: likertValuesString
       }
     });
     navigate('/qtnr');
   };
 
-
-  const likertOptions = {
-    question: null,
-    responses: likertSeven,
-    onChange: (val) => {
-      setLikertValue(val.value);
-    }
+const likertOptions = likertValues.map((_, index) => ({
+  responses: likertSeven,
+  onChange: (val) => {
+    setLikertValues(prevValues => {
+      const newValues = [...prevValues];
+      newValues[index] = val.value;
+      return newValues;
+    });
   }
+}));
   const handleRadioChange = (event) => {
     const newValue = event.target.value;
     if (newValue === 'init') {
       setData(all.data);
     } else if (newValue === 'final') {
-      setData(final_data);
+      getClusterInfo();
     }
   };
 
+  const questions = [
+    "最終的なグループ分けは初期のグループ分けよりも、分かりやすいと思いますか？",
+    "最終的なグループ分けは初期のグループ分けよりも、もっとうまく分類できそうだと思いますか?",
+    "最終的なグループ分け結果は、初期のグループ分け結果よりもあなたの期待や直感に最も合致していますか？"
+  ];
+
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <p>最終的なクラスタリングはクラスタリングよりも良いと思いますか？</p>
-        <Likert {...likertOptions} className="likert-scale" />
+       {likertOptions.map((options, index) => (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }} key={index}>
+        <p style={{ width: '50%' }}>{index+1}.{questions[index]}</p>
+        <div style={{ width: '50%' }}>
+          <Likert {...options} id={`compare${index+1}`} className="likert-scale" />
+        </div>
       </div>
+    ))}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
           <RadioGroup
@@ -125,10 +99,9 @@ const Cluster_Question = ({ data, setData }) => {
             defaultValue="final"
             onChange={handleRadioChange}
           >
-            <FormControlLabel value="init" control={<Radio />} label="初期化" />
-            <FormControlLabel value="final" control={<Radio />} label="最終的" />
+            <FormControlLabel value="init" control={<Radio />} label="初期状態" />
+            <FormControlLabel value="final" control={<Radio />} label="最終状態" />
           </RadioGroup>
-          <SubjectSelect setData={setData} />
         </div>
         <button onClick={handleSubmit}>
           <LastPageIcon />
@@ -152,7 +125,7 @@ const Cluster_Question = ({ data, setData }) => {
 
 function Display() {
   const [round, setRound] = useState(() => parseInt(localStorage.getItem("round")) || 0);
-  const [_, __, ___, axiosFetch] = useAxiosPrivate();
+  const [response, error, loading, axiosFetch] = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -163,8 +136,6 @@ function Display() {
 
   const imageListRef = React.useRef();
   const [data, setData] = useState(all.data);
-  
-
   const [cluster_ids, setClusters] = useState([]);
   const [isValidTopic, setIsValidTopic] = useState(false);
   const handleDelete = (idToDelete) => {
@@ -206,7 +177,7 @@ function Display() {
             likert: scores.toString()
           }
         });
-        console.log(scores.toString());
+        // console.log(scores.toString());
         // 错误处理
         setOpen(false);
         localStorage.setItem('startRated', true);
@@ -216,11 +187,31 @@ function Display() {
     }
   };
 
+  const getClusterInfo = () => {
+    axiosFetch({
+      method: 'post',
+      url: '/cluster',
+      requestConfig: {
+        round: round
+      }
+    });
+}
+useEffect(() => {
+  if(round>=1){
+    getClusterInfo();
+  }
+},[round]);
+useEffect(() => {
+  if (!loading && !error && response?.data) {
+    // console.log(response.data);
+      setData(response.data);
+  }
+}, [response, loading, error]);
 
   return (
     <div>
       <Dialog open={false}>
-        <DialogTitle>画像のグループ分け結果を評価してください</DialogTitle>
+        <DialogTitle>Please give the topic rating!</DialogTitle>
         <DialogContent style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Snackbar
             open={openSnackbar}
@@ -232,7 +223,7 @@ function Display() {
             </Alert>
           </Snackbar>
           {activeStep !== null && (
-            <Likert id={activeStep} question={'適切にグループ分けされている。'} responses={likertSeven} onChange={(e) => {
+            <Likert id={activeStep} question={'This group of images appear to represent a single topic.'} responses={likertSeven} onChange={(e) => {
               const newVal = e.value;
               setCurrent(newVal);
             }} />
@@ -262,7 +253,7 @@ function Display() {
           activeStep={activeStep}
           nextButton={
             <Button size="small" onClick={handleNext}>
-              {activeStep === maxSteps - 1 ? '確認' : '次へ'}
+              {activeStep === maxSteps - 1 ? '確認' : 'next'}
             </Button>
           }
         >
@@ -276,7 +267,7 @@ function Display() {
       <div className="display-header">
         <div className="instruction-text">
           {round > 3 ?
-            <Cluster_Question data={data} setData={setData}/> :
+            <Cluster_Question getClusterInfo={getClusterInfo} setData={setData}/> :
             // <Typography variant="h6">please slect 5 topic first</Typography>
             <Typography variant="h6">グループが重なっている箇所からグループを５つ選んでください。</Typography>
           }
@@ -288,7 +279,6 @@ function Display() {
             :
             <>
             <div>
-            <SubjectSelect setData={setData}/>
             {cluster_ids.map((id, index) => (
               <Chip
                 key={index}
@@ -300,7 +290,7 @@ function Display() {
             ))}
             {isValidTopic && <FontAwesomeIcon icon={faCheck} style={{ color: 'green', marginTop: '10px', marginLeft: '10px' }} />}
             </div>
-            <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 20 }}>
+            <Link to="/dnd" state={{ cluster_ids: cluster_ids, column_limit: 100 }}>
               <button disabled={!isValidTopic}>
                 <ArrowForwardIcon />続ける</button></Link>
                 </>

@@ -8,6 +8,7 @@ import fig2 from '../fig2.png';
 import zoom from '../zoom.png';
 // import demo from '../dnd_demo.gif';
 import demo from '../demo-dnd.MP4';
+import hint from '../hint.png';
 
 const Instruction = () =>{
 return(
@@ -18,6 +19,10 @@ return(
 <li>- 画像には、以下のような対象が写っています。</li>
 <li style={{ display: 'flex', justifyContent: 'center' }}>
       <img src={subject} alt="Guide" style={{ width: '65%' }} />
+    </li>
+<li>- ダブルクリックするとヒントが表示されますが、必ずしもそれを推奨するわけではありません。ヒントがずっと一番正確だとは限らないからです。</li>
+<li style={{ display: 'flex', justifyContent: 'center' }}>
+      <img src={hint} alt="Hint" style={{ width: '65%' }} />
     </li>
 
 </ul>

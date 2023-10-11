@@ -35,29 +35,27 @@ const ThanksMessage = ({ children }) => (
 
 const Thanks = () => {
   const { setAuth } = useAuth();
-  const token=localStorage.getItem('token');
-  useEffect(() => {
-    if (token === 'expired' || token === 'finish') {
-      setAuth({});
+  const access_token=localStorage.getItem('access_token');
+    if (access_token === 'expired' || access_token === 'finish') {
+      localStorage.setItem('user_id', '');
     }
-  }, []);
 
-  if (token === 'expired') { 
-    console.log("expired");
+
+  if (access_token === 'expired') { 
     return (
       <ThanksMessage>
         長時間操作がなかった場合、自動的にログアウトされ、実験が無効になります。
       </ThanksMessage>
     );
-  } else if (token === 'finish') {
-    console.log("finish");
+  } else if (access_token === 'finish') {
     return (
       <ThanksMessage>
         ご協力ありがとうございました。
+        承認コード:285477
       </ThanksMessage>
     );
   } else{
-    console.log("no show")
+    console.log("no show",access_token)
     return (
       <ThanksMessage>
         You do not have access to the requested page.

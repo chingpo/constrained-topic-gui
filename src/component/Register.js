@@ -13,8 +13,8 @@ const REGISTER_URL = '/register';
 const Register = () => {
     const { auth,setAuth} = useAuth();
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token === 'finish' || token === 'expired') {
+        const access_token = localStorage.getItem('access_token');
+        if (access_token === 'finish' || access_token === 'expired') {
           navigate('/logout');
         }
       }, []);
@@ -62,9 +62,9 @@ const Register = () => {
             );
             const access_token = response?.data?.data.access_token;
             const user_id = response?.data?.data.user_id;
-            localStorage.setItem('token', access_token);
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('user_id', user_id);
             setAuth({ user_id, access_token });
-            console.log("register",access_token);
             setAge('');
             setGender('');
             navigate('/disclaimer', { state: { from: location }, replace: true} );
