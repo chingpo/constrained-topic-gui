@@ -1,4 +1,7 @@
+
 # constrained-topic-model
+![Guide](https://raw.githubusercontent.com/chingpo/constrained-topic-gui/main/src/guide.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
