@@ -1,74 +1,49 @@
+# Constrained Topic Model
 
-# constrained-topic-model
-![Guide](https://raw.githubusercontent.com/chingpo/constrained-topic-gui/main/src/guide.png)
+A human-in-the-loop visual explanation system that bridges machine learning interpretations 
+and human semantic understanding through interactive drag-and-drop clustering.
 
-# Getting Started with Create React App
+![Interactive Workflow](https://raw.githubusercontent.com/chingpo/constrained-topic-gui/main/src/guide.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## How It Works
 
-## Available Scripts
+| Step | Action | Output |
+|------|--------|--------|
+| 1. Human Input | Users drag-and-drop prototypes into semantic clusters | Grouped prototypes |
+| 2. Constraint Generation | System extracts pairwise relationships from user groupings | Must-link & cannot-link constraints |
+| 3. Model Update | Constrained clustering algorithm learns from human feedback | Refined prototype clusters |
+| 4. Explanation | Model generates interpretable visual explanations | Human-aligned outputs |
 
-In the project directory, you can run:
+## Core Innovation
+- 🎯 **Interactive Interface**: Drag-and-drop clustering captures human semantic knowledge
+- 🔄 **Constraint-Based Learning**: Converts user interactions into machine-readable constraints
+- 📊 **Validated Approach**: User study demonstrates improved alignment with human perception
 
-### `npm start`
+## Authentication System
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Built for Interactive User Studies
+This project implements a robust authentication architecture specifically designed for 
+**behavioral experiments requiring user login and data persistence**. Common use cases:
+- Longitudinal studies where participants return across multiple sessions
+- Crowdsourcing experiments (e.g., Yahoo! Crowd Sourcing, MTurk) requiring participant tracking
+- Interactive tasks generating sensitive behavioral data requiring secure storage
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Architecture
+**Request Layer (`useAxiosPrivate` hook)**
+- Auto-injects JWT tokens via Axios interceptors (no manual header configuration needed)
+- AbortController-based request cancellation prevents memory leaks
+- Unified error/loading state management
 
-### `npm test`
+**Authentication Flow (`RequireAuth` component)**
+- Token validation and automatic redirect on expiration
+- localStorage-based session recovery (survives page refresh)
+- Flexible routing: unauthenticated users redirected to registration
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### For Researchers
+This authentication layer is **designed to be reusable**. To adapt for your own study:
+1. Configure backend API endpoints in `axios.js`
+2. Customize registration form fields for your participant metadata
+3. Modify route protection rules in `RequireAuth.js` if needed
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The modular design means you can focus on **experiment-specific UI/UX** rather than 
+rebuilding authentication infrastructure.
